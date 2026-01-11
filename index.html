@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropFarm | Tap Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ОСНОВНЫЕ СТИЛИ КАК В HAMSTER KOMBAT */
+        :root {
+            --primary: #1a56db;
+            --secondary: #0e4da4;
+            --accent: #00ff9d;
+            --dark: #0f172a;
+            --darker: #0a1122;
+            --light: #e2e8f0;
+            --gray: #64748b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            background: var(--dark);
+            color: white;
+            max-width: 400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+        
+        /* ШАПКА ТОЧЬ-В-ТОЧЬ КАК НА СКРИНЕ 1 */
+        .top-bar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 15px 20px;
+            border-radius: 0 0 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .player-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .player-name {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .player-level {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .exchange-badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* СТАТИСТИКА КАК НА СКРИНЕ */
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 15px;
+        }
+        
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .stat-value {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--accent), #00ffcc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* КЛИКЕР ОБЛАСТЬ */
+        .clicker-section {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .clicker-circle {
+            width: 220px;
+            height: 220px;
+            margin: 0 auto;
+            background: radial-gradient(circle, var(--primary), var(--darker));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 8px solid rgba(0, 255, 157, 0.3);
+            box-shadow: 
+                0 0 60px rgba(0, 255, 157, 0.2),
+                inset 0 0 40px rgba(0, 0, 0, 0.5);
+            transition: transform 0.1s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .clicker-circle:active {
+            transform: scale(0.97);
+        }
+        
+        .clicker-circle::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 30%, rgba(0, 255, 157, 0.1) 70%);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+        
+        .clicker-icon {
+            font-size: 70px;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .tap-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .tap-bonus {
+            position: absolute;
+            font-weight: 800;
+            color: var(--accent);
+            font-size: 24px;
+            pointer-events: none;
+            animation: float 1s ease-out forwards;
+            text-shadow: 0 0 10px rgba(0, 255, 157, 0.7);
+            z-index: 100;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-80px) scale(0.5); opacity: 0; }
+        }
+        
+        /* НИЖНЕЕ МЕНЮ ТОЧНО КАК В HK */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--darker);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            max-width: 400px;
+            margin: 0 auto;
+            z-index: 1000;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--gray);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 5px 10px;
+            border-radius: 10px;
+            min-width: 60px;
+        }
+        
+        .nav-item.active {
+            color: var(--accent);
+            background: rgba(0, 255, 157, 0.1);
+        }
+        
+        .nav-icon {
+            font-size: 22px;
+            margin-bottom: 3px;
+        }
+        
+        /* КОНТЕНТ ВКЛАДОК */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ВКЛАДКА EXCHANGE (СКРИН 1) */
+        .exchange-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 20px;
+        }
+        
+        .exchange-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .exchange-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .exchange-card.active {
+            border-color: var(--accent);
+            background: rgba(0, 255, 157, 0.1);
+        }
+        
+        .exchange-logo {
+            font-size: 32px;
+            margin-bottom: 10px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .exchange-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        /* ВКЛАДКА EARN (СКРИН 5) */
+        .upgrades-container {
+            padding: 15px;
+        }
+        
+        .upgrade-category {
+            margin-bottom: 25px;
+        }
+        
+        .category-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .upgrades-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .upgrade-item {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.2));
+            border-radius: 16px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upgrade-item.locked {
+            opacity: 0.6;
+            filter: grayscale(0.7);
+        }
+        
+        .upgrade-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .upgrade-icon {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 255, 157, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .upgrade-level {
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+        
+        .upgrade-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .upgrade-profit {
+            font-size: 12px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .upgrade-progress {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #00ffcc);
+            border-radius: 2px;
+            width: 60%;
+        }
+        
+        .upgrade-cost {
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upgrade-cost:hover {
+            transform: scale(1.03);
+        }
+        
+        .upgrade-cost:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+        }
+        
+        .requirement-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #f59e0b;
+            color: black;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        
+        /* ВКЛАДКА FRIENDS */
+        .friends-container {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .friends-count {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 20px 0;
+        }
+        
+        .referral-link {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-family: monospace;
+            border: 1px dashed var(--accent);
+        }
+        
+        .friends-rewards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .reward-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .reward-amount {
+            color: var(--accent);
+            font-size: 20px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        /* ВКЛАДКА AIRDROP */
+        .airdrop-container {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .airdrop-timer {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 20px 0;
+            font-family: monospace;
+        }
+        
+        .airdrop-progress {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 30px 0;
+        }
+        
+        .airdrop-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #00ffcc);
+            width: 45%;
+            border-radius: 10px;
+        }
+        
+        /* ГОЛОВОЛОМКА */
+        .puzzle-notification {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            margin: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            animation: pulse-gold 2s infinite;
+            display: none;
+        }
+        
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+        }
+        
+        .puzzle-button {
+            background: black;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- ШАПКА КАК НА СКРИНЕ 1 -->
+    <div class="top-bar">
+        <div class="player-info">
+            <div class="player-avatar">C</div>
+            <div>
+                <div class="player-name" id="playerName">@cropfarmer</div>
+                <div class="player-level">Уровень <span id="currentLevel">7</span></div>
+            </div>
+        </div>
+        <div class="exchange-badge">
+            <i class="fas fa-exchange-alt"></i>
+            <span id="currentExchange">Binance</span>
+        </div>
+    </div>
+    
+    <!-- СТАТИСТИКА -->
+    <div class="stats-container">
+        <div class="stat-box">
+            <div class="stat-label"><i class="fas fa-hand-pointer"></i> За тап</div>
+            <div class="stat-value" id="perTapStat">+17</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label"><i class="fas fa-coins"></i> Для апа</div>
+            <div class="stat-value" id="coinsToUpgrade">50M</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label"><i class="fas fa-chart-line"></i> В час</div>
+            <div class="stat-value" id="perHourStat">+625.22K</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label"><i class="fas fa-trophy"></i> Ранг</div>
+            <div class="stat-value" id="rankStat">Legendary</div>
+        </div>
+    </div>
+    
+    <!-- КЛИКЕР -->
+    <div class="clicker-section">
+        <div class="clicker-circle" id="clicker">
+            <div class="clicker-icon">🌾</div>
+        </div>
+        <div class="tap-info">Тапов: <span id="tapCounter">33,777,696</span></div>
+    </div>
+    
+    <!-- ГОЛОВОЛОМКА -->
+    <div class="puzzle-notification" id="puzzleAlert">
+        <div><i class="fas fa-puzzle-piece"></i> <strong>Головоломка дня доступна!</strong></div>
+        <button class="puzzle-button" onclick="openPuzzle()">Решить за +50K</button>
+    </div>
+    
+    <!-- ВКЛАДКА EXCHANGE (АКТИВНА ПО УМОЛЧАНИЮ) -->
+    <div id="exchangeTab" class="tab-content active">
+        <div style="padding:20px;text-align:center;">
+            <h3 style="margin-bottom:20px;">Выберите биржу</h3>
+            <div class="exchange-grid" id="exchangeGrid">
+                <!-- Биржи загружаются через JS -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- ВКЛАДКА MINE -->
+    <div id="mineTab" class="tab-content">
+        <div class="upgrades-container">
+            <div class="category-title">Шахта</div>
+            <div class="upgrades-grid">
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <div class="upgrade-icon"><i class="fas fa-hard-hat"></i></div>
+                        <div class="upgrade-level">M9</div>
+                    </div>
+                    <div class="upgrade-name">Буровая</div>
+                    <div class="upgrade-profit">+838/час</div>
+                    <div class="upgrade-progress"><div class="progress-bar" style="width:90%"></div></div>
+                    <button class="upgrade-cost" onclick="buyUpgrade('drill')">6.96K</button>
+                </div>
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <div class="upgrade-icon"><i class="fas fa-tractor"></i></div>
+                        <div class="upgrade-level">M2</div>
+                    </div>
+                    <div class="upgrade-name">Экскаватор</div>
+                    <div class="upgrade-profit">+447/час</div>
+                    <div class="upgrade-progress"><div class="progress-bar" style="width:20%"></div></div>
+                    <button class="upgrade-cost" onclick="buyUpgrade('excavator')">M 0</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ВКЛАДКА FRIENDS -->
+    <div id="friendsTab" class="tab-content">
+        <div class="friends-container">
+            <h3><i class="fas fa-user-friends"></i> Пригласите друзей</h3>
+            <div class="friends-count" id="friendsCount">0</div>
+            <p>Друзей приглашено</p>
+            
+            <div class="referral-link" id="referralLink">
+                https://t.me/CropFarmBot?start=ref123456
+            </div>
+            <button class="upgrade-cost" onclick="copyReferral()" style="width:200px;">
+                <i class="fas fa-copy"></i> Скопировать ссылку
+            </button>
+            
+            <div class="friends-rewards">
+                <div class="reward-card">
+                    <div>5 друзей</div>
+                    <div class="reward-amount">+50K</div>
+                    <div>Открывает Legal</div>
+                </div>
+                <div class="reward-card">
+                    <div>15 друзей</div>
+                    <div class="reward-amount">+500K</div>
+                    <div>Открывает Specials</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ВКЛАДКА EARN (ОСНОВНАЯ - КАК СКРИН 5) -->
+    <div id="earnTab" class="tab-content">
+        <div class="upgrades-container">
+            <div class="category-title">PR & Team</div>
+            <div class="upgrades-grid">
+                <!-- Facebook -->
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <div class="upgrade-icon"><i class="fab fa-facebook"></i></div>
+                        <div class="upgrade-level">M9</div>
+                    </div>
+                    <div class="upgrade-name">Facebook Ads</div>
+                    <div class="upgrade-profit">+838/час</div>
+                    <div class="upgrade-progress"><div class="progress-bar" style="width:90%"></div></div>
+                    <button class="upgrade-cost" onclick="buyUpgrade('facebook')">6.96K</button>
+                </div>
+                
+                <!-- Medium -->
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <div class="upgrade-icon"><i class="fab fa-medium"></i></div>
+                        <div class="upgrade-level">M2</div>
+                    </div>
+                    <div class="upgrade-name">Medium</div>
+                    <div class="upgrade-profit">+83/час</div>
+                    <div class="upgrade-progress"><div class="progress-bar" style="width:20%"></div></div>
+                    <button class="upgrade-cost" onclick="buyUpgrade('medium')">M 0</button>
+                </div>
+                
+                <!-- Instagram -->
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <div class="upgrade-icon"><i class="fab fa-instagram"></i></div>
+                        <div class="upgrade-level">M0</div>
+                    </div>
+                    <div class="upgrade-name">Instagram</div>
+                    <div class="upgrade-profit">+50/час</div>
+                    <div class="upgrade-progress"><div class="progress-bar" style="width:0%"></div></div>
+                    <button class="upgrade-cost" onclick="buyUpgrade('instagram')">M 0</button>
+                </div>
+                
+                <!-- YouTube -->
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <div class="upgrade-icon"><i class="fab fa-youtube"></i></div>
+                        <div class="upgrade-level">M8</div>
+                    </div>
+                    <div class="upgrade-name">YouTube</div>
+                    <div class="upgrade-profit">+600/час</div>
+                    <div class="upgrade-progress"><div class="progress-bar" style="width:80%"></div></div>
+                    <button class="upgrade-cost" onclick="buyUpgrade('youtube')">M 0</button>
+                </div>
+                
+                <!-- TikTok -->
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <div class="upgrade-icon"><i class="fab fa-tiktok"></i></div>
+                        <div class="upgrade-level">M0</div>
+                    </div>
+                    <div class="upgrade-name">TikTok</div>
+                    <div class="upgrade-profit">+100/час</div>
+                    <div class="upgrade-progress"><div class="progress-bar" style="width:0%"></div></div>
+                    <button class="upgrade-cost" onclick="buyUpgrade('tiktok')">M 0</button>
+                </div>
+                
+                <!-- Influencers (заблокировано) -->
+                <div class="upgrade-item locked">
+                    <div class="requirement-badge">10 друзей</div>
+                    <div class="upgrade-header">
+                        <div class="upgrade-icon"><i class="fas fa-star"></i></div>
+                        <div class="upgrade-level">M3</div>
+                    </div>
+                    <div class="upgrade-name">Influencers</div>
+                    <div class="upgrade-profit">+270/час</div>
+                    <div class="upgrade-progress"><div class="progress-bar" style="width:30%"></div></div>
+                    <button class="upgrade-cost" disabled>Требуются друзья</button>
+                </div>
+            </div>
+            
+            <!-- Markets (как на скрине 6) -->
+            <div class="category-title" style="margin-top:30px;">Markets</div>
+            <div class="upgrades-grid">
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <div class="upgrade-icon"><i class="fas fa-globe"></i></div>
+                        <div class="upgrade-level">Lvl 17</div>
+                    </div>
+                    <div class="upgrade-name">Web3 Integration</div>
+                    <div class="upgrade-profit">+19.85K/час</div>
+                    <div class="upgrade-progress"><div class="progress-bar" style="width:85%"></div></div>
+                    <button class="upgrade-cost" onclick="buyUpgrade('web3')">10M</button>
+                </div>
+                
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <div class="upgrade-icon"><i class="fas fa-vote-yea"></i></div>
+                        <div class="upgrade-level">Lvl 17</div>
+                    </div>
+                    <div class="upgrade-name">DAO</div>
+                    <div class="upgrade-profit">+7.81K/час</div>
+                    <div class="upgrade-progress"><div class="progress-bar" style="width:85%"></div></div>
+                    <button class="upgrade-cost" onclick="buyUpgrade('dao')">7M</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ВКЛАДКА AIRDROP -->
+    <div id="airdropTab" class="tab-content">
+        <div class="airdrop-container">
+            <h3><i class="fas fa-gift"></i> CropFarm Airdrop</h3>
+            <p>До запуска токена</p>
+            <div class="airdrop-timer" id="airdropTimer">14:22:05</div>
+            <p>Ваш ранг: <span class="stat-value">Gold</span></p>
+            
+            <div class="airdrop-progress">
+                <div class="airdrop-bar"></div>
+            </div>
+            <p>Прогресс до следующего уровня: 45%</p>
+            
+            <button class="upgrade-cost" style="width:200px;margin-top:20px;">
+                <i class="fas fa-rocket"></i> Заявить награду
+            </button>
+        </div>
+    </div>
+    
+    <!-- НИЖНЕЕ МЕНЮ ТОЧНО КАК В HAMSTER KOMBAT -->
+    <div class="bottom-nav">
+        <div class="nav-item active" data-tab="exchangeTab" onclick="switchTab('exchangeTab')">
+            <div class="nav-icon"><i class="fas fa-exchange-alt"></i></div>
+            <div>Exchange</div>
+        </div>
+        <div class="nav-item" data-tab="mineTab" onclick="switchTab('mineTab')">
+            <div class="nav-icon"><i class="fas fa-hard-hat"></i></div>
+            <div>Mine</div>
+        </div>
+        <div class="nav-item" data-tab="friendsTab" onclick="switchTab('friendsTab')">
+            <div class="nav-icon"><i class="fas fa-user-friends"></i></div>
+            <div>Friends</div>
+        </div>
+        <div class="nav-item" data-tab="earnTab" onclick="switchTab('earnTab')">
+            <div class="nav-icon"><i class="fas fa-coins"></i></div>
+            <div>Earn</div>
+        </div>
+        <div class="nav-item" data-tab="airdropTab" onclick="switchTab('airdropTab')">
+            <div class="nav-icon"><i class="fas fa-gift"></i></div>
+            <div>Airdrop</div>
+        </div>
+    </div>
+
+    <script>
+        // ============ ИГРОВЫЕ ДАННЫЕ ============
+        let game = {
+            coins: 33777696,
+            taps: 33777696,
+            perTap: 17,
+            perHour: 625220,
+            level: 7,
+            maxLevel: 10,
+            exchange: 'Binance',
+            rank: 'Legendary',
+            friends: 0,
+            upgrades: {
+                facebook: { level: 9, cost: 6960, profit: 838, maxLevel: 10 },
+                medium: { level: 2, cost: 0, profit: 83, maxLevel: 10 },
+                instagram: { level: 0, cost: 1000, profit: 50, maxLevel: 10 },
+                youtube: { level: 8, cost: 0, profit: 600, maxLevel: 10 },
+                tiktok: { level: 0, cost: 1500, profit: 100, maxLevel: 10 },
+                influencers: { level: 3, cost: 5000, profit: 270, maxLevel: 10, locked: true },
+                drill: { level: 9, cost: 6960, profit: 838, maxLevel: 10 },
+                excavator: { level: 2, cost: 0, profit: 447, maxLevel: 10 },
+                web3: { level: 17, cost: 10000000, profit: 19850, maxLevel: 20 },
+                dao: { level: 17, cost: 7000000, profit: 7810, maxLevel: 20 }
+            }
+        };
+
+        // ============ БИРЖИ ============
+        const exchanges = [
+            {name: 'Binance', icon: '🏦', code: 'binance'},
+            {name: 'Bybit', icon: '🚀', code: 'bybit'},
+            {name: 'OKX', icon: '⚡', code: 'okx'},
+            {name: 'HTX', icon: '🔥', code: 'htx'},
+            {name: 'Kucoin', icon: '🔶', code: 'kucoin'},
+            {name: 'Gate.io', icon: '🚪', code: 'gate'},
+            {name: 'MEXC', icon: '💎', code: 'mexc'},
+            {name: 'Bitget', icon: '🛡️', code: 'bitget'},
+            {name: 'Coinbase', icon: '🪙', code: 'coinbase'},
+            {name: 'Kraken', icon: '🐙', code: 'kraken'}
+        ];
+
+        // ============ ИНИЦИАЛИЗАЦИЯ ============
+        function initGame() {
+            loadGame();
+            initExchanges();
+            initTelegram();
+            updateUI();
+            startPassiveIncome();
+            startAirdropTimer();
+            checkPuzzle();
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('cropfarmFull');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.assign(game, data);
+            }
+        }
+
+        function saveGame() {
+            localStorage.setItem('cropfarmFull', JSON.stringify(game));
+        }
+
+        // ============ ИНТЕРФЕЙС ============
+        function updateUI() {
+            // Статистика
+            document.getElementById('perTapStat').textContent = `+${game.perTap}`;
+            document.getElementById('coinsToUpgrade').textContent = `${Math.round(50 - (game.level/game.maxLevel)*50)}M`;
+            document.getElementById('perHourStat').textContent = `+${(game.perHour/1000).toFixed(2)}K`;
+            document.getElementById('rankStat').textContent = game.rank;
+            document.getElementById('currentLevel').textContent = game.level;
+            document.getElementById('tapCounter').textContent = game.taps.toLocaleString();
+            document.getElementById('currentExchange').textContent = game.exchange;
+            document.getElementById('friendsCount').textContent = game.friends;
+            
+            // Имя игрока из Telegram
+            if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+                const user = Telegram.WebApp.initDataUnsafe.user;
+                document.getElementById('playerName').textContent = `@${user.username || 'player'}`;
+            }
+            
+            // Обновление кнопок улучшений
+            for (const [key, upgrade] of Object.entries(game.upgrades)) {
+                const buttons = document.querySelectorAll(`[onclick="buyUpgrade('${key}')"]`);
+                buttons.forEach(btn => {
+                    if (upgrade.cost > 0) {
+                        btn.textContent = upgrade.cost.toLocaleString();
+                        btn.disabled = game.coins < upgrade.cost;
+                    } else {
+                        btn.textContent = 'M 0';
+                    }
+                    
+                    // Блокировка если требует друзей
+                    if (key === 'influencers' && game.friends < 10) {
+                        btn.disabled = true;
+                        btn.textContent = 'Нужно 10 друзей';
+                    }
+                });
+            }
+        }
+
+        // ============ БИРЖИ ============
+        function initExchanges() {
+            const grid = document.getElementById('exchangeGrid');
+            grid.innerHTML = '';
+            
+            exchanges.forEach(ex => {
+                const card = document.createElement('div');
+                card.className = `exchange-card ${ex.name === game.exchange ? 'active' : ''}`;
+                card.innerHTML = `
+                    <div class="exchange-logo">${ex.icon}</div>
+                    <div class="exchange-name">${ex.name}</div>
+                `;
+                card.onclick = () => selectExchange(ex.name);
+                grid.appendChild(card);
+            });
+        }
+
+        function selectExchange(name) {
+            game.exchange = name;
+            document.querySelectorAll('.exchange-card').forEach(card => {
+                card.classList.remove('active');
+                if (card.querySelector('.exchange-name').textContent === name) {
+                    card.classList.add('active');
+                }
+            });
+            updateUI();
+            saveGame();
+            
+            // Эффект при выборе
+            document.getElementById('currentExchange').textContent = name;
+        }
+
+        // ============ КЛИКЕР ============
+        document.getElementById('clicker').addEventListener('click', function(e) {
+            // Координаты клика
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Добавление монет
+            game.coins += game.perTap;
+            game.taps++;
+            
+            // Анимация +N
+            const bonus = document.createElement('div');
+            bonus.className = 'tap-bonus';
+            bonus.textContent = `+${game.perTap}`;
+            bonus.style.left = `${x}px`;
+            bonus.style.top = `${y}px`;
+            this.appendChild(bonus);
+            
+            // Уровень каждые 100 тапов
+            if (game.taps % 100 === 0) {
+                game.level = Math.min(game.level + 1, game.maxLevel);
+                
+                // Улучшение за тап каждые 10 уровней
+                if (game.level % 10 === 0) {
+                    game.perTap += 1;
+                    showNotification(`💪 Сила тапа увеличена до +${game.perTap}!`);
+                }
+                
+                // Ранг меняется каждые 3 уровня
+                const ranks = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grandmaster', 'Legendary'];
+                game.rank = ranks[Math.min(Math.floor(game.level / 3), ranks.length - 1)];
+            }
+            
+            // Удаление анимации
+            setTimeout(() => bonus.remove(), 1000);
+            
+            updateUI();
+            saveGame();
+        });
+
+        // ============ УЛУЧШЕНИЯ ============
+        function buyUpgrade(type) {
+            const upgrade = game.upgrades[type];
+            if (!upgrade || upgrade.level >= upgrade.maxLevel) return;
+            
+            // Проверка на блокировку
+            if (type === 'influencers' && game.friends < 10) {
+                showNotification('❌ Нужно пригласить 10 друзей!');
+                return;
+            }
+            
+            if (game.coins >= upgrade.cost) {
+                game.coins -= upgrade.cost;
+                upgrade.level++;
+                upgrade.cost = Math.round(upgrade.cost * 1.5);
+                game.perHour += upgrade.profit;
+                
+                // Обновление уровня в интерфейсе
+                const levelElements = document.querySelectorAll(`[onclick="buyUpgrade('${type}')"]`)
+                    .forEach(btn => {
+                        const levelEl = btn.closest('.upgrade-item')?.querySelector('.upgrade-level');
+                        if (levelEl) levelEl.textContent = `M${upgrade.level}`;
+                        
+                        // Обновление прогресс-бара
+                        const progressBar = btn.closest('.upgrade-item')?.querySelector('.progress-bar');
+                        if (progressBar) {
+                            const percent = (upgrade.level / upgrade.maxLevel) * 100;
+                            progressBar.style.width = `${percent}%`;
+                        }
+                    });
+                
+                updateUI();
+                saveGame();
+                showNotification(`✅ ${type} улучшен до уровня ${upgrade.level}!`);
+                
+                // Звуковой эффект (если нужен)
+                if (typeof Telegram !== 'undefined' && Telegram.WebApp?.HapticFeedback) {
+                    Telegram.WebApp.HapticFeedback.impactOccurred('light');
+                }
+            } else {
+                showNotification('❌ Недостаточно монет!');
+            }
+        }
+
+        // ============ ВКЛАДКИ ============
+        function switchTab(tabId) {
+            // Скрыть все
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Показать выбранную
+            document.getElementById(tabId).classList.add('active');
+            
+            // Обновить меню
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.tab === tabId) item.classList.add('active');
+            });
+            
+            // Сохранить последнюю вкладку
+            localStorage.setItem('lastTab', tabId);
+        }
+
+        // ============ ДРУЗЬЯ ============
+        function copyReferral() {
+            const link = document.getElementById('referralLink').textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                showNotification('📋 Ссылка скопирована!');
+                
+                // Симуляция приглашения друга
+                game.friends++;
+                if (game.friends === 5) {
+                    showNotification('🎉 Открыт раздел Legal!');
+                }
+                if (game.friends === 10) {
+                    showNotification('🎉 Открыты Influencers!');
+                    game.upgrades.influencers.locked = false;
+                }
+                if (game.friends === 15) {
+                    showNotification('🎉 Открыты Specials!');
+                }
+                
+                updateUI();
+                saveGame();
+            });
+        }
+
+        // ============ ГОЛОВОЛОМКА ============
+        function checkPuzzle() {
+            const lastPuzzle = localStorage.getItem('puzzleDate');
+            const today = new Date().toDateString();
+            
+            if (lastPuzzle !== today) {
+                document.getElementById('puzzleAlert').style.display = 'block';
+            }
+        }
+
+        function openPuzzle() {
+            const puzzles = [
+                { question: "CROP = 3, FARM = 4, HARVEST = ?", answer: "7" },
+                { question: "2 + 2 × 2 = ?", answer: "6" },
+                { question: "Сколько бирж в списке?", answer: "10" }
+            ];
+            
+            const puzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
+            const answer = prompt(`🎴 Головоломка дня:\n\n${puzzle.question}\n\nВведите ответ:`);
+            
+            if (answer === puzzle.answer) {
+                const reward = 50000;
+                game.coins += reward;
+                localStorage.setItem('puzzleDate', new Date().toDateString());
+                document.getElementById('puzzleAlert').style.display = 'none';
+                updateUI();
+                saveGame();
+                showNotification(`🎉 Правильно! +${reward.toLocaleString()} монет!`);
+            } else {
+                showNotification('❌ Неверный ответ! Попробуйте завтра.');
+            }
+        }
+
+        // ============ AIRDROP ТАЙМЕР ============
+        function startAirdropTimer() {
+            function updateTimer() {
+                const now = new Date();
+                const target = new Date(now);
+                target.setHours(23, 59, 59, 999);
+                
+                const diff = target - now;
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('airdropTimer').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        // ============ ПАССИВНЫЙ ДОХОД ============
+        function startPassiveIncome() {
+            setInterval(() => {
+                game.coins += game.perHour / 3600;
+                updateUI();
+                saveGame();
+            }, 1000);
+        }
+
+        // ============ TELEGRAM ============
+        function initTelegram() {
+            if (window.Telegram?.WebApp) {
+                const tg = Telegram.WebApp;
+                
+                // Расширить на весь экран
+                tg.expand();
+                
+                // Цветовая схема
+                tg.setHeaderColor('#1a56db');
+                tg.setBackgroundColor('#0f172a');
+                
+                // Кнопка назад
+                tg.BackButton.onClick(() => {
+                    tg.close();
+                });
+                
+                // Вибрация
+                tg.HapticFeedback = tg.HapticFeedback || {
+                    impactOccurred: () => {},
+                    notificationOccurred: () => {}
+                };
+                
+                tg.ready();
+            }
+        }
+
+        // ============ УТИЛИТЫ ============
+        function showNotification(text) {
+            // Создаем временное уведомление
+            const notification = document.createElement('div');
+            notification.textContent = text;
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0,0,0,0.9);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 15px;
+                z-index: 10000;
+                font-weight: bold;
+                box-shadow: 0 0 30px rgba(0,255,157,0.5);
+                border: 2px solid var(--accent);
+                animation: fadeInOut 2s;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+
+        // ============ ЗАПУСК ============
+        window.onload = initGame;
+        
+        // Восстановить последнюю вкладку
+        const lastTab = localStorage.getItem('lastTab') || 'exchangeTab';
+        switchTab(lastTab);
+    </script>
+</body>
+</html>
