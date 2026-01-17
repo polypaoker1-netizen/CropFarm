@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- GalaxyFarm Web App - Updated Version -->
+<!-- GalaxyFarm Web App - Complete Version with Referrals and Withdraw -->
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GalaxyFarm - Игра</title>
+    <title>GalaxyFarm - Зарабатывай реальные деньги</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -16,6 +16,7 @@
             --purple: #9d4edd;
             --red: #ff4757;
             --green: #00d2a0;
+            --disabled: #666666;
         }
         
         * {
@@ -91,6 +92,7 @@
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             padding: 15px;
+            margin-top: 10px;
         }
         
         .energy-bar {
@@ -169,6 +171,11 @@
             opacity: 1;
         }
         
+        .nav-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
         .nav-btn i {
             font-size: 20px;
         }
@@ -245,6 +252,84 @@
             color: #ffd700;
         }
         
+        /* Referral Screen */
+        .referral-container {
+            padding: 20px;
+        }
+        
+        .referral-card {
+            background: rgba(26, 26, 74, 0.7);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .referral-code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 15px;
+            font-family: monospace;
+            font-size: 20px;
+            text-align: center;
+            margin: 15px 0;
+            border: 2px dashed #ffd700;
+        }
+        
+        .ref-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .ref-stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+        }
+        
+        /* Withdraw Screen */
+        .withdraw-container {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .withdraw-icon {
+            font-size: 100px;
+            color: var(--disabled);
+            margin-bottom: 30px;
+            opacity: 0.5;
+        }
+        
+        .withdraw-card {
+            background: rgba(102, 102, 102, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 2px dashed var(--disabled);
+        }
+        
+        .withdraw-info {
+            background: rgba(26, 26, 74, 0.7);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .withdraw-method {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            margin: 10px 0;
+            opacity: 0.6;
+        }
+        
         /* Prizes List */
         .prizes-list {
             display: grid;
@@ -290,6 +375,26 @@
             border-left: 5px solid #ffd700;
             z-index: 1000;
             display: none;
+            max-width: 90%;
+        }
+        
+        /* Buttons */
+        .action-btn {
+            background: linear-gradient(90deg, #9d4edd, #6a00ff);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .action-btn:disabled {
+            background: var(--disabled);
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -318,9 +423,9 @@
                     <div class="stat-label">ЗВЁЗДЫ</div>
                 </div>
                 <div class="stat-card">
-                    <i class="fas fa-gem"></i>
-                    <div class="stat-value" id="income">0</div>
-                    <div class="stat-label">В ЧАС</div>
+                    <i class="fas fa-users"></i>
+                    <div class="stat-value" id="referrals">0</div>
+                    <div class="stat-label">РЕФЕРАЛЫ</div>
                 </div>
             </div>
             
@@ -345,20 +450,24 @@
                 <div id="tap-per-click">+1 коин за клик</div>
             </div>
             
-            <div style="text-align: center; margin: 30px 0;">
-                <button class="spin-btn" onclick="switchScreen('spin')" style="background: linear-gradient(90deg, #ffd700, #ffcc00); width: 100%;">
+            <div style="text-align: center; margin: 20px 0;">
+                <button class="action-btn" onclick="switchScreen('spin')">
                     <i class="fas fa-dice"></i> КОЛЕСО ФОРТУНЫ
+                </button>
+                <button class="action-btn" onclick="switchScreen('referral')" style="background: linear-gradient(90deg, #00d2a0, #00b894);">
+                    <i class="fas fa-users"></i> ПРИГЛАСИТЬ ДРУЗЕЙ
                 </button>
             </div>
             
             <!-- Quick Info -->
             <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; margin-top: 20px;">
-                <div style="text-align: center; margin-bottom: 15px;">
-                    <i class="fas fa-info-circle" style="color: #00b4ff;"></i>
-                    <span style="margin-left: 10px;">Уведомления от игры GalaxyFarm</span>
+                <div style="text-align: center; margin-bottom: 15px; color: #ffd700;">
+                    <i class="fas fa-bell"></i> Уведомления от игры GalaxyFarm
                 </div>
                 <div id="notifications-list">
-                    <!-- Уведомления будут здесь -->
+                    <div style="padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 10px;">
+                        Добро пожаловать в GalaxyFarm! 🚀
+                    </div>
                 </div>
             </div>
         </div>
@@ -405,31 +514,133 @@
             </div>
         </div>
         
-        <!-- Profile Screen -->
-        <div id="profile-screen" class="screen">
+        <!-- Referral Screen -->
+        <div id="referral-screen" class="screen">
             <div class="screen-title">
-                <i class="fas fa-user"></i> ПРОФИЛЬ
+                <i class="fas fa-users"></i> РЕФЕРАЛЬНАЯ СИСТЕМА
             </div>
             
-            <div style="text-align: center; padding: 20px;">
-                <div style="font-size: 48px; margin-bottom: 20px;">
-                    <i class="fas fa-user-astronaut"></i>
+            <div class="referral-container">
+                <div class="referral-card">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <i class="fas fa-user-friends" style="font-size: 48px; color: #00d2a0;"></i>
+                        <h3 style="margin: 15px 0;">Приглашай друзей и получай бонусы!</h3>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div style="font-size: 14px; opacity: 0.8; margin-bottom: 10px;">Ваш реферальный код:</div>
+                        <div class="referral-code" id="referral-code">GF123456</div>
+                        <button class="action-btn" onclick="copyReferralCode()" style="background: linear-gradient(90deg, #3498db, #2980b9);">
+                            <i class="fas fa-copy"></i> КОПИРОВАТЬ КОД
+                        </button>
+                    </div>
+                    
+                    <div class="ref-stats">
+                        <div class="ref-stat">
+                            <div style="font-size: 24px; font-weight: bold;" id="total-referrals">0</div>
+                            <div style="font-size: 12px;">Приглашено друзей</div>
+                        </div>
+                        <div class="ref-stat">
+                            <div style="font-size: 24px; font-weight: bold;" id="ref-earnings">0</div>
+                            <div style="font-size: 12px;">Заработано с рефералов</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(0, 210, 160, 0.1); border-radius: 15px; padding: 20px; margin: 20px 0;">
+                        <h4 style="color: #00d2a0; margin-bottom: 15px;">
+                            <i class="fas fa-gift"></i> Бонусы за приглашения
+                        </h4>
+                        <div style="margin-bottom: 8px;">
+                            <i class="fas fa-check-circle" style="color: #00d2a0;"></i>
+                            <span style="margin-left: 10px;">За каждого друга: <b>+500 коинов</b></span>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <i class="fas fa-check-circle" style="color: #00d2a0;"></i>
+                            <span style="margin-left: 10px;">Друг получает: <b>+300 коинов</b></span>
+                        </div>
+                        <div>
+                            <i class="fas fa-check-circle" style="color: #00d2a0;"></i>
+                            <span style="margin-left: 10px;">За 10 друзей: <b>+5000 коинов + 50 звёзд</b></span>
+                        </div>
+                    </div>
+                    
+                    <button class="action-btn" onclick="shareReferral()">
+                        <i class="fas fa-share-alt"></i> ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Withdraw Screen -->
+        <div id="withdraw-screen" class="screen">
+            <div class="screen-title">
+                <i class="fas fa-wallet"></i> ВЫВОД СРЕДСТВ
+            </div>
+            
+            <div class="withdraw-container">
+                <div class="withdraw-icon">
+                    <i class="fas fa-lock"></i>
                 </div>
                 
-                <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; margin-bottom: 20px;">
-                    <div style="font-size: 20px; font-weight: bold; margin-bottom: 15px;">
-                        Ваша статистика
-                    </div>
-                    <div style="text-align: left;">
-                        <div style="margin-bottom: 10px;">🎯 Всего кликов: <span id="total-clicks">0</span></div>
-                        <div style="margin-bottom: 10px;">🎰 Всего спинов: <span id="total-spins">0</span></div>
-                        <div style="margin-bottom: 10px;">📈 Уровень: <span id="level">1</span></div>
-                        <div>👥 Приглашено друзей: <span id="friends">0</span></div>
+                <div class="withdraw-card">
+                    <h3 style="color: var(--disabled); margin-bottom: 15px;">Система вывода в разработке</h3>
+                    <p style="opacity: 0.8; margin-bottom: 20px;">
+                        Наши инженеры работают над системой вывода средств.
+                        Скоро вы сможете выводить заработанные коины!
+                    </p>
+                    <div style="color: #ffd700; font-weight: bold;">
+                        <i class="fas fa-clock"></i> Доступно в следующем обновлении
                     </div>
                 </div>
                 
-                <button class="spin-btn" onclick="switchScreen('home')" style="background: linear-gradient(90deg, #9d4edd, #6a00ff); width: 100%;">
-                    <i class="fas fa-home"></i> НАЗАД
+                <div class="withdraw-info">
+                    <h4 style="color: #ffd700; margin-bottom: 15px;">
+                        <i class="fas fa-info-circle"></i> Информация о выводе
+                    </h4>
+                    <div style="margin-bottom: 10px;">
+                        <i class="fas fa-coins" style="color: #ffcc00;"></i>
+                        <span style="margin-left: 10px;">Минимальная сумма вывода: <b>10,000 коинов</b></span>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <i class="fas fa-star" style="color: #ffd700;"></i>
+                        <span style="margin-left: 10px;">Требуется звёзд для вывода: <b>50</b></span>
+                    </div>
+                    <div>
+                        <i class="fas fa-clock" style="color: #00b4ff;"></i>
+                        <span style="margin-left: 10px;">Время обработки: <b>до 24 часов</b></span>
+                    </div>
+                </div>
+                
+                <h4 style="margin: 25px 0 15px; text-align: center; color: #ffd700;">
+                    <i class="fas fa-credit-card"></i> Будут доступны:
+                </h4>
+                
+                <div class="withdraw-method">
+                    <i class="fas fa-credit-card" style="font-size: 24px; color: var(--disabled);"></i>
+                    <div>
+                        <div style="font-weight: bold;">Банковская карта</div>
+                        <div style="font-size: 12px; opacity: 0.8;">Visa, Mastercard, Мир</div>
+                    </div>
+                </div>
+                
+                <div class="withdraw-method">
+                    <i class="fas fa-mobile-alt" style="font-size: 24px; color: var(--disabled);"></i>
+                    <div>
+                        <div style="font-weight: bold;">Электронные кошельки</div>
+                        <div style="font-size: 12px; opacity: 0.8;">ЮMoney, Qiwi, WebMoney</div>
+                    </div>
+                </div>
+                
+                <div class="withdraw-method">
+                    <i class="fab fa-bitcoin" style="font-size: 24px; color: var(--disabled);"></i>
+                    <div>
+                        <div style="font-weight: bold;">Криптовалюта</div>
+                        <div style="font-size: 12px; opacity: 0.8;">Bitcoin, USDT, Ethereum</div>
+                    </div>
+                </div>
+                
+                <button class="action-btn" disabled style="margin-top: 30px;">
+                    <i class="fas fa-lock"></i> ВЫВОД НЕДОСТУПЕН
                 </button>
             </div>
         </div>
@@ -456,13 +667,17 @@
             <i class="fas fa-dice"></i>
             <span>Колесо</span>
         </button>
+        <button class="nav-btn" data-screen="referral">
+            <i class="fas fa-users"></i>
+            <span>Рефералы</span>
+        </button>
+        <button class="nav-btn disabled" data-screen="withdraw">
+            <i class="fas fa-wallet"></i>
+            <span>Вывод</span>
+        </button>
         <button class="nav-btn" data-screen="upgrade">
             <i class="fas fa-arrow-up"></i>
             <span>Улучшения</span>
-        </button>
-        <button class="nav-btn" data-screen="profile">
-            <i class="fas fa-user"></i>
-            <span>Профиль</span>
         </button>
     </div>
     
@@ -482,8 +697,10 @@
             freeSpins: 1,
             totalClicks: 0,
             totalSpins: 0,
+            referrals: 0,
+            refEarnings: 0,
+            referralCode: "GF" + Math.floor(Math.random() * 1000000),
             level: 1,
-            friends: 0,
             income: 0,
             upgrades: {
                 click: 0,
@@ -492,7 +709,7 @@
             }
         };
         
-        // Spin Prizes (точно как вы просили)
+        // Spin Prizes
         const SPIN_PRIZES = [
             {name: "+1K коинов", type: "coins", amount: 1000, color: "#ffcc00"},
             {name: "+5K коинов", type: "coins", amount: 5000, color: "#ff9900"},
@@ -509,6 +726,7 @@
         
         // Utility Functions
         function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
             if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
             return num;
         }
@@ -519,14 +737,13 @@
             document.getElementById('energy').textContent = gameData.energy;
             document.getElementById('energy-text').textContent = `${gameData.energy}/${gameData.maxEnergy}`;
             document.getElementById('stars').textContent = gameData.stars;
-            document.getElementById('income').textContent = gameData.income;
+            document.getElementById('referrals').textContent = gameData.referrals;
             document.getElementById('tap-per-click').textContent = `+${gameData.clickPower} коин за клик`;
             document.getElementById('free-spins').textContent = gameData.freeSpins;
             document.getElementById('spin-stars').textContent = gameData.stars;
-            document.getElementById('total-clicks').textContent = gameData.totalClicks;
-            document.getElementById('total-spins').textContent = gameData.totalSpins;
-            document.getElementById('level').textContent = gameData.level;
-            document.getElementById('friends').textContent = gameData.friends;
+            document.getElementById('referral-code').textContent = gameData.referralCode;
+            document.getElementById('total-referrals').textContent = gameData.referrals;
+            document.getElementById('ref-earnings').textContent = formatNumber(gameData.refEarnings);
             
             // Update energy bar
             const energyPercent = (gameData.energy / gameData.maxEnergy) * 100;
@@ -540,14 +757,25 @@
             });
             
             // Show target screen
-            document.getElementById(`${screenName}-screen`).classList.add('active');
+            const targetScreen = document.getElementById(`${screenName}-screen`);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+            }
             
             // Update navigation
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            document.querySelector(`.nav-btn[data-screen="${screenName}"]`).classList.add('active');
+            const targetBtn = document.querySelector(`.nav-btn[data-screen="${screenName}"]`);
+            if (targetBtn && !targetBtn.classList.contains('disabled')) {
+                targetBtn.classList.add('active');
+            } else if (screenName === 'withdraw') {
+                // Для вывода показываем сообщение
+                alert("🚧 Система вывода находится в разработке!\nСледите за обновлениями.");
+                switchScreen('home');
+                return;
+            }
             
             // Load screen data
             if (screenName === 'spin') {
@@ -694,7 +922,7 @@
                 resultDiv.style.color = prize.color;
                 
                 // Show notification
-                showNotification(`Получен приз: ${prize.name}`);
+                showNotification(`🎰 Получен приз: ${prize.name}`);
                 
                 // Reset button
                 setTimeout(() => {
@@ -705,6 +933,41 @@
                 }, 2000);
                 
             }, 3000);
+        }
+        
+        // Referral System
+        function copyReferralCode() {
+            navigator.clipboard.writeText(gameData.referralCode).then(() => {
+                showNotification("✅ Реферальный код скопирован!");
+            }).catch(err => {
+                showNotification("❌ Ошибка копирования");
+            });
+        }
+        
+        function shareReferral() {
+            const refLink = `https://t.me/galaxyFarmbot?start=${gameData.referralCode}`;
+            const shareText = `Присоединяйся к GalaxyFarm! 🚀\nЗарабатывай реальные деньги вместе со мной!\nТвой бонус при регистрации: 300 коинов!\n${refLink}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'GalaxyFarm - Зарабатывай деньги!',
+                    text: 'Присоединяйся к GalaxyFarm!',
+                    url: refLink
+                });
+            } else {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    showNotification("✅ Ссылка скопирована! Отправь её друзьям!");
+                });
+            }
+        }
+        
+        function addReferral() {
+            gameData.referrals += 1;
+            gameData.refEarnings += 500;
+            gameData.balance += 500;
+            showNotification(`🎉 Новый реферал! +500 коинов`);
+            updateUI();
+            saveGame();
         }
         
         // Upgrades System
@@ -794,7 +1057,7 @@
             
             updateUI();
             loadUpgrades();
-            showNotification(`Улучшение "${type}" куплено!`);
+            showNotification(`✅ Улучшение "${type}" куплено!`);
             saveGame();
         }
         
@@ -876,10 +1139,16 @@
             
             // Setup navigation
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const screen = this.getAttribute('data-screen');
-                    switchScreen(screen);
-                });
+                if (!btn.classList.contains('disabled')) {
+                    btn.addEventListener('click', function() {
+                        const screen = this.getAttribute('data-screen');
+                        switchScreen(screen);
+                    });
+                } else {
+                    btn.addEventListener('click', function() {
+                        showNotification("Эта функция находится в разработке!");
+                    });
+                }
             });
             
             // Energy recovery every minute
@@ -887,8 +1156,15 @@
             
             // Show welcome notification
             setTimeout(() => {
-                showNotification("Добро пожаловать в GalaxyFarm!");
+                showNotification("🚀 Добро пожаловать в GalaxyFarm!");
             }, 1000);
+            
+            // Simulate referral notification
+            setTimeout(() => {
+                if (Math.random() > 0.7) {
+                    showNotification("👥 Приглашай друзей и получай бонусы!");
+                }
+            }, 5000);
         }
         
         // Start game
