@@ -1,37 +1,34 @@
 <!DOCTYPE html>
-<!-- GalaxyCatFarm Web App - Full Version -->
+<!-- GalaxyFarm Web App - Updated Version -->
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GalaxyCatFarm - Space Cats</title>
+    <title>GalaxyFarm - Игра</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --space-dark: #0a0e29;
-            --space-light: #1a1f4b;
+            --galaxy-dark: #0a0a2a;
+            --galaxy-blue: #1a1a4a;
             --star-gold: #ffd700;
-            --cat-orange: #ff6b35;
-            --nebula-purple: #8a2be2;
-            --planet-blue: #4169e1;
-            --cosmic-pink: #ff1493;
-            --energy-green: #00ff88;
-            --disabled-gray: #666666;
+            --energy-blue: #00b4ff;
+            --coin-yellow: #ffcc00;
+            --purple: #9d4edd;
+            --red: #ff4757;
+            --green: #00d2a0;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #000428 0%, #004e92 100%);
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #000428, #004e92);
             color: white;
             min-height: 100vh;
-            overflow-x: hidden;
             padding-bottom: 80px;
         }
         
@@ -43,13 +40,11 @@
         
         /* Header */
         .header {
-            background: rgba(10, 14, 41, 0.9);
-            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 42, 0.9);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(255, 107, 53, 0.3);
+            border: 2px solid rgba(255, 215, 0, 0.3);
         }
         
         .game-title {
@@ -57,22 +52,21 @@
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 20px;
-            background: linear-gradient(90deg, #ff6b35, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #ffd700;
         }
         
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
+            margin-bottom: 20px;
         }
         
         .stat-card {
-            background: rgba(26, 31, 75, 0.7);
+            background: rgba(26, 26, 74, 0.7);
             border-radius: 15px;
             padding: 15px;
-            border: 1px solid rgba(65, 105, 225, 0.3);
+            text-align: center;
         }
         
         .stat-card i {
@@ -94,46 +88,36 @@
         
         /* Energy Bar */
         .energy-container {
-            margin: 20px 0;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             padding: 15px;
         }
         
-        .energy-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        
         .energy-bar {
-            height: 25px;
+            height: 20px;
             background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            margin-top: 10px;
         }
         
         .energy-fill {
             height: 100%;
-            background: linear-gradient(90deg, #00ff88, #4169e1);
+            background: linear-gradient(90deg, #00b4ff, #0099ff);
             border-radius: 10px;
             width: 75%;
-            transition: width 1s ease;
         }
         
-        /* Main Tap Area */
+        /* Tap Area */
         .tap-area {
-            background: linear-gradient(135deg, #8a2be2, #4169e1);
+            background: linear-gradient(135deg, #9d4edd, #6a00ff);
             border-radius: 25px;
             padding: 40px 20px;
             margin: 25px 0;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(138, 43, 226, 0.4);
-            border: 3px solid rgba(255, 215, 0, 0.5);
             cursor: pointer;
             user-select: none;
-            transition: all 0.2s;
+            border: 3px solid rgba(255, 215, 0, 0.5);
         }
         
         .tap-area:active {
@@ -152,19 +136,17 @@
             margin-bottom: 10px;
         }
         
-        /* Bottom Navigation */
+        /* Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(10, 14, 41, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 2px solid rgba(255, 107, 53, 0.3);
+            background: rgba(10, 10, 42, 0.95);
             padding: 12px 15px;
             display: flex;
             justify-content: space-around;
-            z-index: 1000;
+            border-top: 2px solid rgba(255, 215, 0, 0.3);
         }
         
         .nav-btn {
@@ -176,23 +158,15 @@
             flex-direction: column;
             align-items: center;
             gap: 6px;
-            padding: 10px 12px;
+            padding: 10px;
             border-radius: 15px;
             cursor: pointer;
-            transition: all 0.3s;
             opacity: 0.7;
-            min-width: 60px;
         }
         
         .nav-btn.active {
-            background: rgba(255, 107, 53, 0.2);
+            background: rgba(157, 78, 221, 0.3);
             opacity: 1;
-            transform: translateY(-5px);
-        }
-        
-        .nav-btn.disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
         }
         
         .nav-btn i {
@@ -202,7 +176,6 @@
         /* Screens */
         .screen {
             display: none;
-            animation: fadeIn 0.3s ease;
         }
         
         .screen.active {
@@ -214,30 +187,13 @@
             font-weight: bold;
             margin-bottom: 25px;
             text-align: center;
-            background: linear-gradient(90deg, #ff6b35, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #ffd700;
         }
         
-        /* Spin Screen */
+        /* Spin Wheel */
         .spin-container {
             text-align: center;
             padding: 20px;
-        }
-        
-        .spin-info {
-            background: rgba(255, 215, 0, 0.1);
-            border: 2px solid #ffd700;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
-        
-        .spin-stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 15px 0;
-            font-size: 18px;
         }
         
         .spin-wheel {
@@ -245,13 +201,12 @@
             height: 280px;
             margin: 0 auto 30px;
             background: conic-gradient(
-                #ff1493, #ff6b35, #ffd700, #00ff88,
-                #4169e1, #8a2be2, #ff1493
+                #ff4757, #ffd700, #00d2a0, #00b4ff,
+                #9d4edd, #ff4757
             );
             border-radius: 50%;
-            box-shadow: 0 0 60px rgba(0, 0, 0, 0.6);
-            border: 15px solid #0a0e29;
             position: relative;
+            border: 15px solid #0a0a2a;
         }
         
         .spin-pointer {
@@ -261,32 +216,13 @@
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 25px solid transparent;
-            border-right: 25px solid transparent;
-            border-top: 50px solid #ff1493;
-            z-index: 10;
-        }
-        
-        .spin-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            background: #0a0e29;
-            border-radius: 50%;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffd700;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #ff4757;
         }
         
         .spin-btn {
-            background: linear-gradient(90deg, #ff1493, #ff6b35);
+            background: linear-gradient(90deg, #ff4757, #ff6b81);
             border: none;
             color: white;
             padding: 20px 60px;
@@ -295,17 +231,10 @@
             font-weight: bold;
             cursor: pointer;
             margin: 20px 0;
-            box-shadow: 0 15px 35px rgba(255, 20, 147, 0.4);
-            transition: all 0.3s;
         }
         
         .spin-btn:active {
             transform: scale(0.95);
-        }
-        
-        .spin-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
         }
         
         #spin-result {
@@ -316,201 +245,51 @@
             color: #ffd700;
         }
         
-        .double-reward {
-            background: rgba(138, 43, 226, 0.1);
-            border: 2px solid #8a2be2;
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 30px;
+        /* Prizes List */
+        .prizes-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
         }
         
-        /* Withdraw Screen */
-        .withdraw-container {
+        .prize-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
             text-align: center;
-            padding: 40px 20px;
+            border: 2px solid;
         }
         
-        .withdraw-icon {
-            font-size: 100px;
-            color: var(--disabled-gray);
-            margin-bottom: 30px;
-            opacity: 0.5;
+        .prize-item.coin {
+            border-color: #ffcc00;
         }
         
-        .withdraw-message {
-            background: rgba(102, 102, 102, 0.2);
-            border-radius: 20px;
-            padding: 30px;
-            margin: 20px 0;
-            border: 2px dashed var(--disabled-gray);
+        .prize-item.star {
+            border-color: #ffd700;
         }
         
-        .withdraw-message h3 {
-            color: var(--disabled-gray);
-            margin-bottom: 15px;
+        .prize-item.energy {
+            border-color: #00b4ff;
         }
         
-        /* Upgrade Cards */
-        .upgrade-card {
-            background: rgba(26, 31, 75, 0.7);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(65, 105, 225, 0.3);
+        .prize-item.special {
+            border-color: #9d4edd;
         }
         
-        .upgrade-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .upgrade-icon {
-            font-size: 32px;
-            color: #ffd700;
-        }
-        
-        .upgrade-level {
-            background: #4169e1;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-        
-        .upgrade-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .upgrade-desc {
-            font-size: 14px;
-            opacity: 0.8;
-            margin-bottom: 15px;
-        }
-        
-        .upgrade-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .upgrade-cost {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffd700;
-        }
-        
-        .upgrade-btn {
-            background: linear-gradient(90deg, #4169e1, #8a2be2);
-            border: none;
-            color: white;
-            padding: 10px 25px;
-            border-radius: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        
-        .upgrade-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        /* Quest Cards */
-        .quest-card {
-            background: rgba(26, 31, 75, 0.7);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-left: 5px solid #00ff88;
-        }
-        
-        .quest-card.completed {
-            border-left-color: #ff6b35;
-        }
-        
-        .quest-card.claimed {
-            border-left-color: #ffd700;
-            opacity: 0.7;
-        }
-        
-        .claim-btn {
-            background: linear-gradient(90deg, #00ff88, #4169e1);
-            border: none;
-            color: white;
-            padding: 12px;
-            border-radius: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 15px;
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .coin-animation {
+        /* Notifications */
+        .notification {
             position: fixed;
-            font-size: 24px;
-            color: #ffd700;
-            font-weight: bold;
-            pointer-events: none;
-            z-index: 10000;
-            animation: floatUp 1s ease-out forwards;
-        }
-        
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) scale(0);
-                opacity: 0;
-            }
-        }
-        
-        /* Responsive */
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .game-title {
-                font-size: 24px;
-            }
-            
-            .stat-value {
-                font-size: 18px;
-            }
-            
-            .tap-icon {
-                font-size: 60px;
-            }
-            
-            .tap-label {
-                font-size: 20px;
-            }
-            
-            .spin-wheel {
-                width: 250px;
-                height: 250px;
-            }
-            
-            .spin-btn {
-                padding: 15px 40px;
-                font-size: 20px;
-            }
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            border-left: 5px solid #ffd700;
+            z-index: 1000;
+            display: none;
         }
     </style>
 </head>
@@ -519,35 +298,35 @@
         <!-- Header -->
         <div class="header">
             <div class="game-title">
-                <i class="fas fa-cat-space"></i> GalaxyCatFarm
+                <i class="fas fa-rocket"></i> GalaxyFarm
             </div>
             
             <div class="stats-grid">
                 <div class="stat-card">
                     <i class="fas fa-coins"></i>
                     <div class="stat-value" id="balance">1,000</div>
-                    <div class="stat-label">STARDUST</div>
+                    <div class="stat-label">КОИНЫ</div>
                 </div>
                 <div class="stat-card">
-                    <i class="fas fa-paw"></i>
-                    <div class="stat-value"><span id="energy">100</span>/<span id="max-energy">100</span></div>
-                    <div class="stat-label">CATNIP</div>
+                    <i class="fas fa-bolt"></i>
+                    <div class="stat-value"><span id="energy">100</span>/100</div>
+                    <div class="stat-label">ЭНЕРГИЯ</div>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-star"></i>
                     <div class="stat-value" id="stars">5</div>
-                    <div class="stat-label">GALAXY STARS</div>
+                    <div class="stat-label">ЗВЁЗДЫ</div>
                 </div>
                 <div class="stat-card">
-                    <i class="fas fa-rocket"></i>
-                    <div class="stat-value" id="income-per-hour">0</div>
-                    <div class="stat-label">STARDUST/HOUR</div>
+                    <i class="fas fa-gem"></i>
+                    <div class="stat-value" id="income">0</div>
+                    <div class="stat-label">В ЧАС</div>
                 </div>
             </div>
             
             <div class="energy-container">
-                <div class="energy-label">
-                    <span><i class="fas fa-paw"></i> Catnip Energy</span>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>⚡ Энергия</span>
                     <span id="energy-text">100/100</span>
                 </div>
                 <div class="energy-bar">
@@ -560,179 +339,109 @@
         <div id="home-screen" class="screen active">
             <div class="tap-area" id="tap-btn">
                 <div class="tap-icon">
-                    <i class="fas fa-cat"></i>
+                    <i class="fas fa-hand-pointer"></i>
                 </div>
-                <div class="tap-label">PET SPACE CAT</div>
-                <div class="tap-per-click" id="tap-per-click">+1 stardust per pet</div>
+                <div class="tap-label">КЛИКАЙ ДЛЯ ЗАРАБОТКА</div>
+                <div id="tap-per-click">+1 коин за клик</div>
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-                <div style="font-size: 20px; margin-bottom: 20px; color: #ffd700;">
-                    <i class="fas fa-chart-line"></i> Space Production: <span id="profit-per-hour">120</span>/hour
-                </div>
-                <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-                    <button class="spin-btn" onclick="switchScreen('improve')" style="background: linear-gradient(90deg, #4169e1, #8a2be2); padding: 15px 30px; font-size: 18px;">
-                        <i class="fas fa-arrow-up"></i> Upgrade
-                    </button>
-                    <button class="spin-btn" onclick="switchScreen('spin')" style="background: linear-gradient(90deg, #ff6b35, #ffd700); padding: 15px 30px; font-size: 18px;">
-                        <i class="fas fa-dice"></i> Spin
-                    </button>
-                </div>
+                <button class="spin-btn" onclick="switchScreen('spin')" style="background: linear-gradient(90deg, #ffd700, #ffcc00); width: 100%;">
+                    <i class="fas fa-dice"></i> КОЛЕСО ФОРТУНЫ
+                </button>
             </div>
             
-            <!-- Quick Stats -->
+            <!-- Quick Info -->
             <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; margin-top: 20px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                    <div>
-                        <div style="font-size: 12px; opacity: 0.7;">Total Pets</div>
-                        <div style="font-size: 20px; font-weight: bold;" id="total-taps">0</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 12px; opacity: 0.7;">Cat Level</div>
-                        <div style="font-size: 20px; font-weight: bold;" id="farm-level">1</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 12px; opacity: 0.7;">Friends</div>
-                        <div style="font-size: 20px; font-weight: bold;" id="friends-count">0</div>
-                    </div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <i class="fas fa-info-circle" style="color: #00b4ff;"></i>
+                    <span style="margin-left: 10px;">Уведомления от игры GalaxyFarm</span>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Improve Screen -->
-        <div id="improve-screen" class="screen">
-            <div class="screen-title">
-                <i class="fas fa-rocket"></i> SPACE UPGRADES
-            </div>
-            <div class="upgrades-grid" id="upgrades-container">
-                <!-- Upgrades loaded by JavaScript -->
+                <div id="notifications-list">
+                    <!-- Уведомления будут здесь -->
+                </div>
             </div>
         </div>
         
         <!-- Spin Screen -->
         <div id="spin-screen" class="screen">
             <div class="screen-title">
-                <i class="fas fa-dice"></i> GALAXY SPIN
+                <i class="fas fa-dice"></i> КОЛЕСО ФОРТУНЫ
             </div>
             
             <div class="spin-container">
-                <div class="spin-info">
-                    <div class="spin-stats">
+                <div style="background: rgba(255, 215, 0, 0.1); border-radius: 20px; padding: 20px; margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-around; margin: 15px 0;">
                         <div>
-                            <div style="font-size: 14px; opacity: 0.7;">Free Spins</div>
+                            <div style="font-size: 14px;">Бесплатных спинов</div>
                             <div style="font-size: 24px; font-weight: bold;" id="free-spins">1</div>
                         </div>
                         <div>
-                            <div style="font-size: 14px; opacity: 0.7;">Galaxy Stars</div>
+                            <div style="font-size: 14px;">Ваши звёзды</div>
                             <div style="font-size: 24px; font-weight: bold;">★<span id="spin-stars">5</span></div>
                         </div>
                     </div>
-                    <div style="margin-top: 15px; font-size: 14px; opacity: 0.8;">
-                        <i class="fas fa-info-circle"></i> 1 free spin daily • Buy extras with stars
-                    </div>
                 </div>
                 
-                <div class="spin-wheel-container">
-                    <div class="spin-wheel" id="spin-wheel">
-                        <div class="spin-pointer"></div>
-                        <div class="spin-center">SPIN</div>
-                    </div>
+                <div class="spin-wheel" id="spin-wheel">
+                    <div class="spin-pointer"></div>
                 </div>
                 
                 <button class="spin-btn" id="spin-button" onclick="doSpin()">
-                    SPIN FOR FREE
+                    КРУТИТЬ БЕСПЛАТНО
                 </button>
                 
                 <div id="spin-result"></div>
                 
-                <div class="double-reward">
-                    <h3><i class="fas fa-gem"></i> Double Reward</h3>
-                    <p style="margin: 10px 0; opacity: 0.9;">Get 2x rewards for your next spin</p>
-                    <button class="spin-btn" onclick="buyDoubleReward()" style="background: linear-gradient(90deg, #8a2be2, #9b30ff); width: 100%; padding: 15px; font-size: 18px;">
-                        PAY 15 ★ STARS
-                    </button>
-                </div>
-                
-                <div style="margin-top: 30px; text-align: center;">
-                    <button class="spin-btn" onclick="buyExtraSpin()" style="background: linear-gradient(90deg, #ff6b35, #ff4500); padding: 12px 25px; font-size: 16px;">
-                        <i class="fas fa-shopping-cart"></i> BUY EXTRA SPIN (10 ★)
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Quests Screen -->
-        <div id="quests-screen" class="screen">
-            <div class="screen-title">
-                <i class="fas fa-tasks"></i> SPACE QUESTS
-            </div>
-            <div class="quests-list" id="quests-container">
-                <!-- Quests loaded by JavaScript -->
-            </div>
-        </div>
-        
-        <!-- Friends Screen -->
-        <div id="friends-screen" class="screen">
-            <div class="screen-title">
-                <i class="fas fa-users"></i> SPACE FRIENDS
-            </div>
-            <div class="spin-container">
-                <div class="stat-card" style="margin-bottom: 25px; text-align: center;">
-                    <i class="fas fa-user-astronaut" style="font-size: 40px;"></i>
-                    <div class="stat-value" id="friends-count-display">0</div>
-                    <div class="stat-label">FRIENDS IN SPACE</div>
-                </div>
-                
-                <h3 style="margin: 25px 0 15px; text-align: center;">Your Space Link:</h3>
-                <div class="referral-link" id="referral-link" style="word-break: break-all; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 15px; border: 2px dashed #4169e1; position: relative;">
-                    https://t.me/galaxyFarmbot?start=123456
-                    <button class="copy-btn" onclick="copyReferral()" style="position: absolute; top: 10px; right: 10px; background: #4169e1; color: white; border: none; padding: 8px 15px; border-radius: 10px; cursor: pointer;">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                </div>
-                
-                <div style="background: rgba(0, 255, 136, 0.1); border-radius: 20px; padding: 25px; margin: 30px 0; border: 2px solid #00ff88;">
-                    <h3 style="margin-bottom: 15px; color: #00ff88;">
-                        <i class="fas fa-gift"></i> Friend Rewards
-                    </h3>
-                    <div style="margin-bottom: 10px;">
-                        <i class="fas fa-check-circle" style="color: #00ff88;"></i>
-                        <span style="margin-left: 10px;">1000 stardust per friend</span>
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        <i class="fas fa-check-circle" style="color: #00ff88;"></i>
-                        <span style="margin-left: 10px;">5 stars for every 3 friends</span>
-                    </div>
-                    <div>
-                        <i class="fas fa-check-circle" style="color: #00ff88;"></i>
-                        <span style="margin-left: 10px;">Special bonus at 10 friends</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Withdraw Screen -->
-        <div id="withdraw-screen" class="screen">
-            <div class="screen-title">
-                <i class="fas fa-wallet"></i> WITHDRAW
-            </div>
-            <div class="withdraw-container">
-                <div class="withdraw-icon">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <div class="withdraw-message">
-                    <h3>Withdraw System Coming Soon!</h3>
-                    <p>Our cosmic engineers are working on the withdrawal system.</p>
-                    <p>It will be available in the next galaxy update!</p>
-                    <p style="margin-top: 20px; color: #ffd700;">
-                        <i class="fas fa-info-circle"></i> Currently unavailable
-                    </p>
-                </div>
+                <!-- Prizes List -->
                 <div style="margin-top: 30px;">
-                    <button class="spin-btn" onclick="switchScreen('home')" style="background: linear-gradient(90deg, #666666, #888888); width: 100%; padding: 15px; font-size: 18px;">
-                        <i class="fas fa-home"></i> BACK TO HOME
-                    </button>
+                    <h3 style="text-align: center; margin-bottom: 15px; color: #ffd700;">
+                        <i class="fas fa-gift"></i> ВОЗМОЖНЫЕ ПРИЗЫ
+                    </h3>
+                    <div class="prizes-list" id="prizes-list">
+                        <!-- Призы загружаются через JS -->
+                    </div>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Profile Screen -->
+        <div id="profile-screen" class="screen">
+            <div class="screen-title">
+                <i class="fas fa-user"></i> ПРОФИЛЬ
+            </div>
+            
+            <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 48px; margin-bottom: 20px;">
+                    <i class="fas fa-user-astronaut"></i>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; margin-bottom: 20px;">
+                    <div style="font-size: 20px; font-weight: bold; margin-bottom: 15px;">
+                        Ваша статистика
+                    </div>
+                    <div style="text-align: left;">
+                        <div style="margin-bottom: 10px;">🎯 Всего кликов: <span id="total-clicks">0</span></div>
+                        <div style="margin-bottom: 10px;">🎰 Всего спинов: <span id="total-spins">0</span></div>
+                        <div style="margin-bottom: 10px;">📈 Уровень: <span id="level">1</span></div>
+                        <div>👥 Приглашено друзей: <span id="friends">0</span></div>
+                    </div>
+                </div>
+                
+                <button class="spin-btn" onclick="switchScreen('home')" style="background: linear-gradient(90deg, #9d4edd, #6a00ff); width: 100%;">
+                    <i class="fas fa-home"></i> НАЗАД
+                </button>
+            </div>
+        </div>
+        
+        <!-- Upgrade Screen -->
+        <div id="upgrade-screen" class="screen">
+            <div class="screen-title">
+                <i class="fas fa-arrow-up"></i> УЛУЧШЕНИЯ
+            </div>
+            
+            <div id="upgrades-container" style="padding: 20px;">
+                <!-- Улучшения загружаются через JS -->
             </div>
         </div>
     </div>
@@ -741,98 +450,85 @@
     <div class="bottom-nav">
         <button class="nav-btn active" data-screen="home">
             <i class="fas fa-home"></i>
-            <span>Home</span>
-        </button>
-        <button class="nav-btn" data-screen="improve">
-            <i class="fas fa-rocket"></i>
-            <span>Upgrade</span>
+            <span>Главная</span>
         </button>
         <button class="nav-btn" data-screen="spin">
             <i class="fas fa-dice"></i>
-            <span>Spin</span>
+            <span>Колесо</span>
         </button>
-        <button class="nav-btn" data-screen="quests">
-            <i class="fas fa-tasks"></i>
-            <span>Quests</span>
+        <button class="nav-btn" data-screen="upgrade">
+            <i class="fas fa-arrow-up"></i>
+            <span>Улучшения</span>
         </button>
-        <button class="nav-btn" data-screen="friends">
-            <i class="fas fa-users"></i>
-            <span>Friends</span>
-        </button>
-        <button class="nav-btn disabled" data-screen="withdraw">
-            <i class="fas fa-wallet"></i>
-            <span>Withdraw</span>
+        <button class="nav-btn" data-screen="profile">
+            <i class="fas fa-user"></i>
+            <span>Профиль</span>
         </button>
     </div>
     
+    <!-- Notification Popup -->
+    <div class="notification" id="notification">
+        <i class="fas fa-bell"></i> <span id="notification-text"></span>
+    </div>
+    
     <script>
-        // ========== GALAXYCATFARM GAME DATA ==========
+        // Game Data
         let gameData = {
             balance: 1000,
             energy: 100,
             maxEnergy: 100,
             stars: 5,
-            incomePerHour: 0,
             clickPower: 1,
             freeSpins: 1,
-            friendsCount: 0,
-            totalTaps: 0,
-            farmLevel: 1,
+            totalClicks: 0,
+            totalSpins: 0,
+            level: 1,
+            friends: 0,
+            income: 0,
             upgrades: {
                 click: 0,
-                income: 0,
                 energy: 0,
                 recharge: 0
-            },
-            quests: [
-                {id: 'tap_250', name: 'Pet cat 250 times', desc: 'Pet your space cat 250 times', target: 250, progress: 0, rewardCoins: 5000, rewardStars: 3, completed: false, claimed: false},
-                {id: 'upgrade_3', name: 'Upgrade 3 cards', desc: 'Buy 3 space upgrades', target: 3, progress: 0, rewardCoins: 5000, rewardStars: 0, completed: false, claimed: false},
-                {id: 'invite_1', name: 'Invite 1 friend', desc: 'Invite a friend to space', target: 1, progress: 0, rewardCoins: 5000, rewardStars: 0, completed: false, claimed: false},
-                {id: 'daily_streak_3', name: '3-day streak', desc: 'Claim daily reward 3 days in a row', target: 3, progress: 1, rewardCoins: 10000, rewardStars: 5, completed: false, claimed: false},
-                {id: 'spin_5', name: 'Spin 5 times', desc: 'Use galaxy spin 5 times', target: 5, progress: 0, rewardCoins: 15000, rewardStars: 10, completed: false, claimed: false}
-            ],
-            hasDoubleSpin: false,
-            spinPrizes: [
-                {name: "1K STARDUST", type: "coins", amount: 1000, chance: 20},
-                {name: "3K STARDUST", type: "coins", amount: 3000, chance: 15},
-                {name: "5K STARDUST", type: "coins", amount: 5000, chance: 10},
-                {name: "10K STARDUST", type: "coins", amount: 10000, chance: 5},
-                {name: "50K STARDUST", type: "coins", amount: 50000, chance: 2},
-                {name: "1 SPIN", type: "spins", amount: 1, chance: 15},
-                {name: "5 SPINS", type: "spins", amount: 5, chance: 5},
-                {name: "10 STARS", type: "stars", amount: 10, chance: 10},
-                {name: "25 STARS", type: "stars", amount: 25, chance: 5},
-                {name: "50 STARS", type: "stars", amount: 50, chance: 2},
-                {name: "+10 CATNIP", type: "energy", amount: 10, chance: 8},
-                {name: "+50 CATNIP", type: "energy", amount: 50, chance: 3}
-            ]
+            }
         };
         
-        // ========== UTILITY FUNCTIONS ==========
+        // Spin Prizes (точно как вы просили)
+        const SPIN_PRIZES = [
+            {name: "+1K коинов", type: "coins", amount: 1000, color: "#ffcc00"},
+            {name: "+5K коинов", type: "coins", amount: 5000, color: "#ff9900"},
+            {name: "+10K коинов", type: "coins", amount: 10000, color: "#ff6600"},
+            {name: "+1 звезда", type: "stars", amount: 1, color: "#ffd700"},
+            {name: "+5 звёзд", type: "stars", amount: 5, color: "#ffcc00"},
+            {name: "+15 звёзд", type: "stars", amount: 15, color: "#ffaa00"},
+            {name: "+20 энергии", type: "energy", amount: 20, color: "#00b4ff"},
+            {name: "+50 энергии", type: "energy", amount: 50, color: "#0099ff"},
+            {name: "+100 энергии", type: "energy", amount: 100, color: "#0077ff"},
+            {name: "2x множитель", type: "multiplier", amount: 2, color: "#9d4edd"},
+            {name: "+1 спин", type: "spins", amount: 1, color: "#ff4757"}
+        ];
+        
+        // Utility Functions
         function formatNumber(num) {
-            if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
             if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-            return num.toString();
+            return num;
         }
         
         function updateUI() {
-            // Update all displayed values
+            // Update stats
             document.getElementById('balance').textContent = formatNumber(gameData.balance);
             document.getElementById('energy').textContent = gameData.energy;
-            document.getElementById('max-energy').textContent = gameData.maxEnergy;
             document.getElementById('energy-text').textContent = `${gameData.energy}/${gameData.maxEnergy}`;
             document.getElementById('stars').textContent = gameData.stars;
-            document.getElementById('income-per-hour').textContent = formatNumber(gameData.incomePerHour);
-            document.getElementById('tap-per-click').textContent = `+${gameData.clickPower} stardust per pet`;
-            document.getElementById('profit-per-hour').textContent = formatNumber(gameData.incomePerHour + 120);
+            document.getElementById('income').textContent = gameData.income;
+            document.getElementById('tap-per-click').textContent = `+${gameData.clickPower} коин за клик`;
             document.getElementById('free-spins').textContent = gameData.freeSpins;
             document.getElementById('spin-stars').textContent = gameData.stars;
-            document.getElementById('friends-count').textContent = gameData.friendsCount;
-            document.getElementById('friends-count-display').textContent = gameData.friendsCount;
-            document.getElementById('total-taps').textContent = gameData.totalTaps;
-            document.getElementById('farm-level').textContent = gameData.farmLevel;
+            document.getElementById('total-clicks').textContent = gameData.totalClicks;
+            document.getElementById('total-spins').textContent = gameData.totalSpins;
+            document.getElementById('level').textContent = gameData.level;
+            document.getElementById('friends').textContent = gameData.friends;
             
-            // Energy bar
+            // Update energy bar
             const energyPercent = (gameData.energy / gameData.maxEnergy) * 100;
             document.getElementById('energy-fill').style.width = `${energyPercent}%`;
         }
@@ -851,54 +547,37 @@
                 btn.classList.remove('active');
             });
             
-            const targetBtn = document.querySelector(`.nav-btn[data-screen="${screenName}"]`);
-            if (targetBtn && !targetBtn.classList.contains('disabled')) {
-                targetBtn.classList.add('active');
-            } else {
-                // If trying to access disabled screen, go to home
-                switchScreen('home');
-                alert('This feature is coming soon!');
-                return;
-            }
+            document.querySelector(`.nav-btn[data-screen="${screenName}"]`).classList.add('active');
             
-            // Load screen-specific data
-            if (screenName === 'improve') {
+            // Load screen data
+            if (screenName === 'spin') {
+                loadPrizes();
+            } else if (screenName === 'upgrade') {
                 loadUpgrades();
-            } else if (screenName === 'quests') {
-                loadQuests();
             }
         }
         
-        // ========== TAP MECHANICS ==========
+        // Tap Mechanics
         document.getElementById('tap-btn').addEventListener('click', function() {
             if (gameData.energy <= 0) {
-                alert("Not enough catnip energy! Wait for recharge.");
+                showNotification("Недостаточно энергии!");
                 return;
             }
             
             // Deduct energy
             gameData.energy -= 1;
-            gameData.totalTaps += 1;
+            gameData.totalClicks += 1;
             
             // Add coins
             const earned = gameData.clickPower;
             gameData.balance += earned;
             
-            // Create animation
-            createCoinAnimation(earned);
-            
-            // Update quest progress
-            const tapQuest = gameData.quests.find(q => q.id === 'tap_250');
-            if (tapQuest && !tapQuest.completed) {
-                tapQuest.progress += 1;
-                if (tapQuest.progress >= tapQuest.target) {
-                    tapQuest.completed = true;
-                }
-            }
-            
             // Update UI
             updateUI();
             saveGame();
+            
+            // Show animation
+            createCoinAnimation(earned);
         });
         
         function createCoinAnimation(amount) {
@@ -908,56 +587,152 @@
             const y = rect.top + rect.height / 2;
             
             const coin = document.createElement('div');
-            coin.className = 'coin-animation';
-            coin.textContent = `+${formatNumber(amount)}`;
-            coin.style.left = `${x}px`;
-            coin.style.top = `${y}px`;
+            coin.style.position = 'fixed';
+            coin.style.left = x + 'px';
+            coin.style.top = y + 'px';
+            coin.style.color = '#ffcc00';
+            coin.style.fontWeight = 'bold';
+            coin.style.fontSize = '24px';
+            coin.style.pointerEvents = 'none';
+            coin.style.zIndex = '1000';
+            coin.textContent = `+${amount}`;
             
             document.body.appendChild(coin);
             
-            setTimeout(() => {
-                coin.remove();
-            }, 1000);
+            // Animation
+            let pos = y;
+            const interval = setInterval(() => {
+                pos -= 2;
+                coin.style.top = pos + 'px';
+                coin.style.opacity = (pos - y + 100) / 100;
+                
+                if (pos < y - 100) {
+                    clearInterval(interval);
+                    coin.remove();
+                }
+            }, 20);
         }
         
-        // ========== UPGRADES SYSTEM ==========
+        // Spin Wheel
+        function loadPrizes() {
+            const container = document.getElementById('prizes-list');
+            container.innerHTML = '';
+            
+            SPIN_PRIZES.forEach(prize => {
+                const item = document.createElement('div');
+                item.className = 'prize-item';
+                
+                // Determine class based on type
+                if (prize.type === 'coins') item.className += ' coin';
+                else if (prize.type === 'stars') item.className += ' star';
+                else if (prize.type === 'energy') item.className += ' energy';
+                else item.className += ' special';
+                
+                item.style.borderColor = prize.color;
+                item.innerHTML = `
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">${prize.name}</div>
+                    <div style="font-size: 12px; opacity: 0.8;">Шанс: ${prize.type === 'coins' ? 'высокий' : prize.type === 'stars' ? 'средний' : 'низкий'}</div>
+                `;
+                
+                container.appendChild(item);
+            });
+        }
+        
+        function doSpin() {
+            if (gameData.freeSpins <= 0) {
+                showNotification("Нет бесплатных спинов!");
+                return;
+            }
+            
+            const spinButton = document.getElementById('spin-button');
+            const spinWheel = document.getElementById('spin-wheel');
+            const resultDiv = document.getElementById('spin-result');
+            
+            // Use spin
+            gameData.freeSpins -= 1;
+            gameData.totalSpins += 1;
+            spinButton.disabled = true;
+            spinButton.textContent = 'КРУТИТСЯ...';
+            
+            // Spin animation
+            let rotation = 0;
+            const spinInterval = setInterval(() => {
+                rotation += 30;
+                spinWheel.style.transform = `rotate(${rotation}deg)`;
+            }, 50);
+            
+            // Stop after 3 seconds
+            setTimeout(() => {
+                clearInterval(spinInterval);
+                
+                // Get random prize
+                const prizeIndex = Math.floor(Math.random() * SPIN_PRIZES.length);
+                const prize = SPIN_PRIZES[prizeIndex];
+                
+                // Apply prize
+                switch(prize.type) {
+                    case 'coins':
+                        gameData.balance += prize.amount;
+                        break;
+                    case 'stars':
+                        gameData.stars += prize.amount;
+                        break;
+                    case 'energy':
+                        gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + prize.amount);
+                        break;
+                    case 'spins':
+                        gameData.freeSpins += prize.amount;
+                        break;
+                    case 'multiplier':
+                        // Apply 2x multiplier for next 10 clicks
+                        showNotification("Активирован 2x множитель на 10 кликов!");
+                        break;
+                }
+                
+                // Show result
+                resultDiv.textContent = `🎉 Вы выиграли: ${prize.name}!`;
+                resultDiv.style.color = prize.color;
+                
+                // Show notification
+                showNotification(`Получен приз: ${prize.name}`);
+                
+                // Reset button
+                setTimeout(() => {
+                    spinButton.disabled = false;
+                    spinButton.textContent = gameData.freeSpins > 0 ? 'КРУТИТЬ СНОВА' : 'КУПИТЬ СПИН';
+                    updateUI();
+                    saveGame();
+                }, 2000);
+                
+            }, 3000);
+        }
+        
+        // Upgrades System
         function loadUpgrades() {
             const upgrades = [
                 {
                     id: 'click',
-                    name: 'Pet Power',
-                    icon: 'fas fa-cat',
-                    desc: 'More stardust per cat pet',
+                    name: 'Сила клика',
+                    desc: 'Увеличивает доход за клик',
                     baseCost: 500,
                     level: gameData.upgrades.click,
-                    effect: '+1 per level'
-                },
-                {
-                    id: 'income',
-                    name: 'Auto Stardust',
-                    icon: 'fas fa-star',
-                    desc: 'Passive stardust every hour',
-                    baseCost: 1000,
-                    level: gameData.upgrades.income,
-                    effect: '+10/hour per level'
+                    effect: '+1 коин за уровень'
                 },
                 {
                     id: 'energy',
-                    name: 'Max Catnip',
-                    icon: 'fas fa-paw',
-                    desc: 'Increase catnip capacity',
-                    baseCost: 2000,
+                    name: 'Макс. энергия',
+                    desc: 'Увеличивает максимальную энергию',
+                    baseCost: 1000,
                     level: gameData.upgrades.energy,
-                    effect: '+10 per level'
+                    effect: '+10 энергии за уровень'
                 },
                 {
                     id: 'recharge',
-                    name: 'Catnip Recharge',
-                    icon: 'fas fa-sync-alt',
-                    desc: 'Faster catnip regeneration',
-                    baseCost: 3000,
+                    name: 'Восстановление',
+                    desc: 'Ускоряет восстановление энергии',
+                    baseCost: 1500,
                     level: gameData.upgrades.recharge,
-                    effect: '+0.2/min per level'
+                    effect: '+0.2/мин за уровень'
                 }
             ];
             
@@ -971,21 +746,26 @@
                 const card = document.createElement('div');
                 card.className = 'upgrade-card';
                 card.innerHTML = `
-                    <div class="upgrade-header">
-                        <div class="upgrade-icon">
-                            <i class="${upgrade.icon}"></i>
+                    <div style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 20px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                            <div style="font-size: 18px; font-weight: bold;">${upgrade.name}</div>
+                            <div style="background: #9d4edd; color: white; padding: 5px 15px; border-radius: 15px;">
+                                Ур. ${upgrade.level}
+                            </div>
                         </div>
-                        <div class="upgrade-level">Lvl ${upgrade.level}</div>
-                    </div>
-                    <div class="upgrade-name">${upgrade.name}</div>
-                    <div class="upgrade-desc">${upgrade.desc}</div>
-                    <div class="upgrade-desc" style="color: #ffd700;">${upgrade.effect}</div>
-                    <div class="upgrade-footer">
-                        <div class="upgrade-cost">${formatNumber(cost)} stardust</div>
-                        <button class="upgrade-btn" ${!canAfford ? 'disabled' : ''} 
-                                onclick="buyUpgrade('${upgrade.id}', ${cost})">
-                            ${canAfford ? 'UPGRADE' : 'NEED DUST'}
-                        </button>
+                        <div style="margin-bottom: 15px; opacity: 0.8;">${upgrade.desc}</div>
+                        <div style="color: #ffd700; margin-bottom: 15px;">${upgrade.effect}</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-size: 16px; font-weight: bold; color: #ffcc00;">
+                                ${formatNumber(cost)} коинов
+                            </div>
+                            <button onclick="buyUpgrade('${upgrade.id}', ${cost})" 
+                                    style="background: ${canAfford ? 'linear-gradient(90deg, #9d4edd, #6a00ff)' : '#666'}; 
+                                           color: white; border: none; padding: 10px 20px; border-radius: 10px;
+                                           cursor: ${canAfford ? 'pointer' : 'not-allowed'}">
+                                ${canAfford ? 'КУПИТЬ' : 'НЕДОСТАТОЧНО'}
+                            </button>
+                        </div>
                     </div>
                 `;
                 
@@ -995,346 +775,127 @@
         
         function buyUpgrade(type, cost) {
             if (gameData.balance < cost) {
-                alert('Not enough stardust!');
+                showNotification("Недостаточно коинов!");
                 return;
             }
             
             gameData.balance -= cost;
             gameData.upgrades[type] += 1;
             
-            // Apply upgrade effect
+            // Apply upgrade
             switch(type) {
                 case 'click':
                     gameData.clickPower += 1;
                     break;
-                case 'income':
-                    gameData.incomePerHour += 10;
-                    break;
                 case 'energy':
                     gameData.maxEnergy += 10;
                     break;
-                case 'recharge':
-                    // Logic for recharge rate
-                    break;
-            }
-            
-            // Update quest progress
-            const upgradeQuest = gameData.quests.find(q => q.id === 'upgrade_3');
-            if (upgradeQuest && !upgradeQuest.completed) {
-                upgradeQuest.progress += 1;
-                if (upgradeQuest.progress >= upgradeQuest.target) {
-                    upgradeQuest.completed = true;
-                }
             }
             
             updateUI();
             loadUpgrades();
+            showNotification(`Улучшение "${type}" куплено!`);
             saveGame();
         }
         
-        // ========== SPIN WHEEL SYSTEM ==========
-        function doSpin() {
-            const spinButton = document.getElementById('spin-button');
-            const spinWheel = document.getElementById('spin-wheel');
-            const resultDiv = document.getElementById('spin-result');
+        // Notification System
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notification-text');
             
-            if (gameData.freeSpins <= 0) {
-                alert("No free spins left! Buy more with stars.");
-                return;
+            text.textContent = message;
+            notification.style.display = 'block';
+            
+            // Add to notifications list
+            const now = new Date();
+            const time = now.getHours().toString().padStart(2, '0') + ':' + 
+                         now.getMinutes().toString().padStart(2, '0');
+            
+            const list = document.getElementById('notifications-list');
+            const notificationItem = document.createElement('div');
+            notificationItem.style.marginBottom = '10px';
+            notificationItem.style.padding = '10px';
+            notificationItem.style.background = 'rgba(0,0,0,0.3)';
+            notificationItem.style.borderRadius = '10px';
+            notificationItem.style.fontSize = '14px';
+            notificationItem.innerHTML = `<span style="color: #00b4ff;">[${time}]</span> ${message}`;
+            
+            list.insertBefore(notificationItem, list.firstChild);
+            
+            // Keep only 5 notifications
+            if (list.children.length > 5) {
+                list.removeChild(list.lastChild);
             }
             
-            gameData.freeSpins -= 1;
-            spinButton.disabled = true;
-            spinButton.textContent = 'SPINNING...';
-            
-            // Spin animation
-            spinWheel.style.animation = 'spin 2s ease-out';
-            
-            // Determine prize after spin
+            // Auto hide
             setTimeout(() => {
-                // Stop animation
-                spinWheel.style.animation = '';
-                
-                // Get random prize
-                const totalChance = gameData.spinPrizes.reduce((sum, prize) => sum + prize.chance, 0);
-                let random = Math.random() * totalChance;
-                let selectedPrize = null;
-                
-                for (const prize of gameData.spinPrizes) {
-                    random -= prize.chance;
-                    if (random <= 0) {
-                        selectedPrize = prize;
-                        break;
-                    }
-                }
-                
-                // Apply 2x multiplier if available
-                let prizeAmount = selectedPrize.amount;
-                if (gameData.hasDoubleSpin) {
-                    prizeAmount *= 2;
-                    gameData.hasDoubleSpin = false;
-                }
-                
-                // Award prize
-                let prizeText = selectedPrize.name;
-                if (gameData.hasDoubleSpin) {
-                    prizeText = `2x ${prizeText}`;
-                }
-                
-                resultDiv.textContent = `🎉 You won: ${prizeText}!`;
-                resultDiv.style.color = '#ffd700';
-                
-                // Give reward
-                switch(selectedPrize.type) {
-                    case 'coins':
-                        gameData.balance += prizeAmount;
-                        break;
-                    case 'stars':
-                        gameData.stars += prizeAmount;
-                        break;
-                    case 'spins':
-                        gameData.freeSpins += prizeAmount;
-                        break;
-                    case 'energy':
-                        gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + prizeAmount);
-                        break;
-                }
-                
-                // Update quest progress
-                const spinQuest = gameData.quests.find(q => q.id === 'spin_5');
-                if (spinQuest && !spinQuest.completed) {
-                    spinQuest.progress += 1;
-                    if (spinQuest.progress >= spinQuest.target) {
-                        spinQuest.completed = true;
-                    }
-                }
-                
-                // Reset button
-                setTimeout(() => {
-                    spinButton.disabled = false;
-                    spinButton.textContent = gameData.freeSpins > 0 ? 'SPIN AGAIN' : 'BUY SPIN';
-                    updateUI();
-                    saveGame();
-                }, 1000);
-                
-            }, 2000);
+                notification.style.display = 'none';
+            }, 3000);
         }
         
-        function buyDoubleReward() {
-            if (gameData.stars < 15) {
-                alert("Need 15 galaxy stars!");
-                return;
-            }
-            
-            if (confirm("Spend 15 stars for 2x reward on next spin?")) {
-                gameData.stars -= 15;
-                gameData.hasDoubleSpin = true;
-                updateUI();
-                saveGame();
-                alert("2x reward activated for next spin!");
-            }
-        }
-        
-        function buyExtraSpin() {
-            if (gameData.stars < 10) {
-                alert("Need 10 galaxy stars!");
-                return;
-            }
-            
-            if (confirm("Buy extra spin for 10 stars?")) {
-                gameData.stars -= 10;
-                gameData.freeSpins += 1;
-                updateUI();
-                saveGame();
-                alert("Extra spin purchased!");
-            }
-        }
-        
-        // ========== QUESTS SYSTEM ==========
-        function loadQuests() {
-            const container = document.getElementById('quests-container');
-            container.innerHTML = '';
-            
-            gameData.quests.forEach(quest => {
-                const percent = Math.min(100, (quest.progress / quest.target) * 100);
-                const completed = quest.completed;
-                const claimed = quest.claimed;
-                
-                let statusClass = '';
-                let statusIcon = '⏳';
-                if (claimed) {
-                    statusClass = 'claimed';
-                    statusIcon = '✅';
-                } else if (completed) {
-                    statusClass = 'completed';
-                    statusIcon = '🔄';
-                }
-                
-                const questCard = document.createElement('div');
-                questCard.className = `quest-card ${statusClass}`;
-                questCard.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <div style="font-size: 18px; font-weight: bold;">${quest.name}</div>
-                        <div style="font-size: 24px;">${statusIcon}</div>
-                    </div>
-                    <div style="font-size: 14px; opacity: 0.8; margin-bottom: 15px;">${quest.desc}</div>
-                    <div style="margin-bottom: 15px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
-                            <span>Progress</span>
-                            <span>${quest.progress}/${quest.target}</span>
-                        </div>
-                        <div style="height: 8px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden;">
-                            <div style="height: 100%; background: linear-gradient(90deg, #4169e1, #8a2be2); width: ${percent}%; border-radius: 4px;"></div>
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 15px; font-size: 14px;">
-                        <div style="display: flex; align-items: center;">
-                            <i class="fas fa-coins" style="color: #ffd700; margin-right: 5px;"></i>
-                            <span>${formatNumber(quest.rewardCoins)}</span>
-                        </div>
-                        ${quest.rewardStars > 0 ? `
-                        <div style="display: flex; align-items: center;">
-                            <i class="fas fa-star" style="color: #00ff88; margin-right: 5px;"></i>
-                            <span>${quest.rewardStars}</span>
-                        </div>
-                        ` : ''}
-                    </div>
-                    ${completed && !claimed ? `
-                    <button class="claim-btn" onclick="claimQuest('${quest.id}')">
-                        CLAIM REWARD
-                    </button>
-                    ` : ''}
-                `;
-                
-                container.appendChild(questCard);
-            });
-        }
-        
-        function claimQuest(questId) {
-            const quest = gameData.quests.find(q => q.id === questId);
-            if (!quest) return;
-            
-            if (quest.claimed) {
-                alert("Already claimed!");
-                return;
-            }
-            
-            if (!quest.completed) {
-                alert("Not completed yet!");
-                return;
-            }
-            
-            // Give rewards
-            gameData.balance += quest.rewardCoins;
-            gameData.stars += quest.rewardStars;
-            quest.claimed = true;
-            
-            updateUI();
-            loadQuests();
-            saveGame();
-            alert(`Claimed ${quest.rewardCoins} stardust + ${quest.rewardStars} stars!`);
-        }
-        
-        // ========== FRIENDS SYSTEM ==========
-        function copyReferral() {
-            const link = document.getElementById('referral-link').textContent.trim();
-            navigator.clipboard.writeText(link).then(() => {
-                alert("Link copied to clipboard!");
-            });
-        }
-        
-        // ========== ENERGY RECHARGE ==========
-        function rechargeEnergy() {
-            if (gameData.energy < gameData.maxEnergy) {
-                gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + 1);
-                updateUI();
-                saveGame();
-            }
-        }
-        
-        function giveAutoIncome() {
-            if (gameData.incomePerHour > 0) {
-                const income = Math.floor(gameData.incomePerHour / 6); // Every 10 minutes
-                gameData.balance += income;
-                updateUI();
-                saveGame();
-            }
-        }
-        
-        // ========== SAVE/LOAD GAME ==========
+        // Save/Load Game
         function saveGame() {
-            localStorage.setItem('galaxycatfarm_save', JSON.stringify({
+            localStorage.setItem('galaxyfarm_save', JSON.stringify({
                 data: gameData,
                 timestamp: Date.now()
             }));
         }
         
         function loadGame() {
-            const saved = localStorage.getItem('galaxycatfarm_save');
+            const saved = localStorage.getItem('galaxyfarm_save');
             if (saved) {
                 const saveData = JSON.parse(saved);
                 const timePassed = Date.now() - saveData.timestamp;
                 
-                // Load saved data
                 gameData = {...gameData, ...saveData.data};
                 
-                // Recharge energy based on time passed
-                if (timePassed > 60000) { // More than 1 minute
+                // Recover energy based on time passed
+                if (timePassed > 60000) {
                     const minutesPassed = timePassed / 60000;
                     const energyGained = Math.floor(minutesPassed);
                     gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + energyGained);
-                    
-                    // Add auto income
-                    if (gameData.incomePerHour > 0) {
-                        const hoursPassed = timePassed / 3600000;
-                        const incomeGained = Math.floor(gameData.incomePerHour * hoursPassed);
-                        gameData.balance += incomeGained;
-                    }
                 }
-                
-                updateUI();
             }
         }
         
-        // ========== INITIALIZATION ==========
+        // Energy Recovery
+        function recoverEnergy() {
+            if (gameData.energy < gameData.maxEnergy) {
+                gameData.energy += 1;
+                updateUI();
+                saveGame();
+            }
+        }
+        
+        // Initialize
         function init() {
             loadGame();
             updateUI();
+            loadPrizes();
             loadUpgrades();
-            loadQuests();
             
             // Setup navigation
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                if (!btn.classList.contains('disabled')) {
-                    btn.addEventListener('click', function() {
-                        const screen = this.getAttribute('data-screen');
-                        switchScreen(screen);
-                    });
-                }
+                btn.addEventListener('click', function() {
+                    const screen = this.getAttribute('data-screen');
+                    switchScreen(screen);
+                });
             });
             
-            // Setup energy recharge timer (every minute)
-            setInterval(rechargeEnergy, 60000);
+            // Energy recovery every minute
+            setInterval(recoverEnergy, 60000);
             
-            // Setup auto income timer (every 10 minutes)
-            setInterval(giveAutoIncome, 600000);
-            
-            // Check for daily spin reset
-            const lastPlayed = localStorage.getItem('galaxycatfarm_last_played');
-            const today = new Date().toDateString();
-            
-            if (lastPlayed !== today) {
-                // Daily reset
-                gameData.freeSpins = 1;
-                localStorage.setItem('galaxycatfarm_last_played', today);
-            }
+            // Show welcome notification
+            setTimeout(() => {
+                showNotification("Добро пожаловать в GalaxyFarm!");
+            }, 1000);
         }
         
-        // Save on page unload
-        window.addEventListener('beforeunload', saveGame);
-        
-        // Initialize game
+        // Start game
         document.addEventListener('DOMContentLoaded', init);
+        
+        // Save on exit
+        window.addEventListener('beforeunload', saveGame);
     </script>
 </body>
 </html>
