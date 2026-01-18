@@ -316,7 +316,7 @@
             background: linear-gradient(90deg, transparent, #ffd700, transparent);
         }
         
-        /* NEW SPIN WHEEL DESIGN (like in screenshot) */
+        /* SPIN WHEEL */
         .spin-container {
             text-align: center;
             padding: 20px;
@@ -483,6 +483,104 @@
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
         
+        /* REFERRAL SYSTEM */
+        .referral-container {
+            padding: 20px;
+        }
+        
+        .referral-card {
+            background: linear-gradient(135deg, rgba(0, 210, 160, 0.1), rgba(0, 180, 148, 0.2));
+            border-radius: 25px;
+            padding: 25px;
+            border: 2px solid rgba(0, 210, 160, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        .referral-code-box {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px dashed #00d2a0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .referral-code {
+            font-family: monospace;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: #00d2a0;
+            letter-spacing: 2px;
+        }
+        
+        .referral-input {
+            width: 100%;
+            padding: 20px;
+            border-radius: 20px;
+            border: 2px solid #9d4edd;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        
+        .referral-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .referral-stat {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(0, 210, 160, 0.2);
+        }
+        
+        .referral-stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00d2a0;
+            margin-bottom: 5px;
+        }
+        
+        .referral-stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .referral-bonuses {
+            background: rgba(0, 210, 160, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #00d2a0;
+        }
+        
+        .bonus-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .bonus-item i {
+            color: #00d2a0;
+            font-size: 20px;
+        }
+        
         /* Upgrade Cards */
         .upgrades-grid {
             display: grid;
@@ -586,6 +684,18 @@
             box-shadow: none;
         }
         
+        .btn-green {
+            background: linear-gradient(90deg, #00d2a0, #00b894);
+        }
+        
+        .btn-blue {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+        }
+        
+        .btn-orange {
+            background: linear-gradient(90deg, #ff6b35, #ff4500);
+        }
+        
         /* Notifications */
         .notification {
             position: fixed;
@@ -665,6 +775,71 @@
             backdrop-filter: blur(5px);
         }
         
+        /* Referral List */
+        .referral-list {
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .referral-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .referral-list::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        
+        .referral-list::-webkit-scrollbar-thumb {
+            background: #9d4edd;
+            border-radius: 4px;
+        }
+        
+        .referral-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            border-left: 4px solid #00d2a0;
+        }
+        
+        .referral-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #9d4edd, #00b4ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .referral-info {
+            flex: 1;
+            margin-left: 15px;
+        }
+        
+        .referral-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .referral-date {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        
+        .referral-earned {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
         /* Responsive */
         @media (max-width: 480px) {
             .container {
@@ -696,6 +871,10 @@
                 padding: 20px 50px;
                 font-size: 24px;
             }
+            
+            .referral-stats {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -724,9 +903,9 @@
                     <div class="stat-label">ЗВЁЗДЫ</div>
                 </div>
                 <div class="stat-card">
-                    <i class="fas fa-clock"></i>
-                    <div class="stat-value" id="income-per-hour">0</div>
-                    <div class="stat-label">АВТО-ДОХОД</div>
+                    <i class="fas fa-users"></i>
+                    <div class="stat-value" id="referral-count">0</div>
+                    <div class="stat-label">РЕФЕРАЛЫ</div>
                 </div>
             </div>
             
@@ -756,13 +935,13 @@
                 <button class="action-btn" onclick="switchScreen('spin')">
                     <i class="fas fa-dice"></i> КОЛЕСО ФОРТУНЫ
                 </button>
-                <button class="action-btn" onclick="switchScreen('referral')" style="background: linear-gradient(90deg, #00d2a0, #00b894);">
+                <button class="action-btn btn-green" onclick="switchScreen('referral')">
                     <i class="fas fa-users"></i> ПРИГЛАСИТЬ ДРУЗЕЙ
                 </button>
-                <button class="action-btn" onclick="switchScreen('upgrade')" style="background: linear-gradient(90deg, #ffd700, #ffcc00);">
+                <button class="action-btn" style="background: linear-gradient(90deg, #ffd700, #ffcc00);" onclick="switchScreen('upgrade')">
                     <i class="fas fa-arrow-up"></i> УЛУЧШЕНИЯ
                 </button>
-                <button class="action-btn" onclick="switchScreen('boosters')" style="background: linear-gradient(90deg, #ff6b35, #ff4500);">
+                <button class="action-btn btn-orange" onclick="switchScreen('boosters')">
                     <i class="fas fa-rocket"></i> БУСТЕРЫ
                 </button>
             </div>
@@ -780,7 +959,7 @@
             </div>
         </div>
         
-        <!-- NEW SPIN SCREEN -->
+        <!-- SPIN SCREEN -->
         <div id="spin-screen" class="screen">
             <button class="back-button" onclick="switchScreen('home')">
                 <i class="fas fa-arrow-left"></i> Назад
@@ -817,15 +996,14 @@
                 <div id="spin-result-new"></div>
                 
                 <div style="margin-top: 30px;">
-                    <button class="action-btn" onclick="buyExtraSpinNew()" style="background: linear-gradient(90deg, #9d4edd, #6a00ff);">
+                    <button class="action-btn btn-orange" onclick="buyExtraSpinNew()">
                         <i class="fas fa-shopping-cart"></i> КУПИТЬ ДОПОЛНИТЕЛЬНЫЙ СПИН
                     </button>
                 </div>
             </div>
         </div>
         
-        <!-- Other screens remain similar but with improved styling -->
-        <!-- Referral Screen -->
+        <!-- REFERRAL SCREEN -->
         <div id="referral-screen" class="screen">
             <button class="back-button" onclick="switchScreen('home')">
                 <i class="fas fa-arrow-left"></i> Назад
@@ -833,7 +1011,101 @@
             <div class="screen-title">
                 <i class="fas fa-users"></i> РЕФЕРАЛЬНАЯ СИСТЕМА
             </div>
-            <!-- Content remains similar but with improved styling -->
+            
+            <div class="referral-container">
+                <!-- Your Referral Code -->
+                <div class="referral-card">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <i class="fas fa-user-friends" style="font-size: 48px; color: #00d2a0;"></i>
+                        <h3 style="margin: 15px 0; font-size: 24px;">Приглашай друзей и получай бонусы!</h3>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="font-size: 16px; margin-bottom: 10px; color: #ffd700;">
+                            <i class="fas fa-gift"></i> Твой реферальный код:
+                        </div>
+                        <div class="referral-code-box">
+                            <div class="referral-code" id="referral-code-display">GF123456</div>
+                        </div>
+                        <button class="action-btn btn-blue" onclick="copyReferralCode()">
+                            <i class="fas fa-copy"></i> СКОПИРОВАТЬ КОД
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Enter Friend's Code -->
+                <div class="referral-card">
+                    <div style="font-size: 20px; margin-bottom: 15px; color: #ffd700;">
+                        <i class="fas fa-gift"></i> ВВЕДИ КОД ДРУГА
+                    </div>
+                    
+                    <input type="text" class="referral-input" id="friend-code-input" placeholder="Введите код друга (например: GF123456)" maxlength="8">
+                    
+                    <button class="action-btn btn-green" onclick="activateFriendCode()">
+                        <i class="fas fa-check-circle"></i> АКТИВИРОВАТЬ КОД
+                    </button>
+                    
+                    <div id="code-status" style="text-align: center; margin-top: 15px; font-size: 14px;"></div>
+                </div>
+                
+                <!-- Referral Statistics -->
+                <div class="referral-stats">
+                    <div class="referral-stat">
+                        <div class="referral-stat-value" id="total-referrals">0</div>
+                        <div class="referral-stat-label">Приглашено друзей</div>
+                    </div>
+                    <div class="referral-stat">
+                        <div class="referral-stat-value" id="ref-earnings">0</div>
+                        <div class="referral-stat-label">Заработано коинов</div>
+                    </div>
+                    <div class="referral-stat">
+                        <div class="referral-stat-value" id="ref-stars">0</div>
+                        <div class="referral-stat-label">Заработано звёзд</div>
+                    </div>
+                    <div class="referral-stat">
+                        <div class="referral-stat-value" id="ref-bonus">500</div>
+                        <div class="referral-stat-label">Бонус за друга</div>
+                    </div>
+                </div>
+                
+                <!-- Referral Bonuses -->
+                <div class="referral-bonuses">
+                    <h4 style="color: #00d2a0; margin-bottom: 15px; font-size: 20px;">
+                        <i class="fas fa-gift"></i> Бонусы за приглашения
+                    </h4>
+                    <div class="bonus-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span><b>За каждого друга:</b> <span style="color: #ffd700;">+500 коинов</span></span>
+                    </div>
+                    <div class="bonus-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span><b>Друг получает:</b> <span style="color: #ffd700;">+300 коинов + 10 звёзд</span></span>
+                    </div>
+                    <div class="bonus-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span><b>За 5 друзей:</b> <span style="color: #ffd700;">+5000 коинов + 50 звёзд</span></span>
+                    </div>
+                    <div class="bonus-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span><b>За 10 друзей:</b> <span style="color: #ffd700;">+15000 коинов + 100 звёзд</span></span>
+                    </div>
+                </div>
+                
+                <!-- Referral List -->
+                <div class="referral-card">
+                    <h4 style="color: #00d2a0; margin-bottom: 15px; font-size: 20px;">
+                        <i class="fas fa-list"></i> Список ваших рефералов
+                    </h4>
+                    <div class="referral-list" id="referral-list">
+                        <!-- Referral items will be added here -->
+                    </div>
+                </div>
+                
+                <!-- Share Button -->
+                <button class="action-btn" onclick="shareReferral()">
+                    <i class="fas fa-share-alt"></i> ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ
+                </button>
+            </div>
         </div>
         
         <!-- Upgrade Screen -->
@@ -885,6 +1157,234 @@
     </div>
     
     <script>
+        // ========== DATABASE SYSTEM ==========
+        class GalaxyFarmDB {
+            constructor() {
+                this.dbName = 'GalaxyFarmDB';
+                this.dbVersion = 3;
+                this.db = null;
+                this.init();
+            }
+            
+            init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.dbVersion);
+                    
+                    request.onerror = (event) => {
+                        console.error('Database error:', event.target.error);
+                        reject(event.target.error);
+                    };
+                    
+                    request.onsuccess = (event) => {
+                        this.db = event.target.result;
+                        console.log('Database initialized');
+                        resolve();
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        
+                        // Game data store
+                        if (!db.objectStoreNames.contains('gameData')) {
+                            const gameStore = db.createObjectStore('gameData', { keyPath: 'id' });
+                            gameStore.createIndex('userId', 'userId', { unique: true });
+                        }
+                        
+                        // Referrals store
+                        if (!db.objectStoreNames.contains('referrals')) {
+                            const refStore = db.createObjectStore('referrals', { keyPath: 'id', autoIncrement: true });
+                            refStore.createIndex('referrerId', 'referrerId', { unique: false });
+                            refStore.createIndex('referredId', 'referredId', { unique: true });
+                            refStore.createIndex('code', 'code', { unique: true });
+                        }
+                        
+                        // Transactions store
+                        if (!db.objectStoreNames.contains('transactions')) {
+                            const txStore = db.createObjectStore('transactions', { keyPath: 'id', autoIncrement: true });
+                            txStore.createIndex('userId', 'userId', { unique: false });
+                            txStore.createIndex('type', 'type', { unique: false });
+                        }
+                        
+                        // Analytics store
+                        if (!db.objectStoreNames.contains('analytics')) {
+                            const analyticsStore = db.createObjectStore('analytics', { keyPath: 'id' });
+                            analyticsStore.createIndex('date', 'date', { unique: true });
+                        }
+                    };
+                });
+            }
+            
+            // Save game data
+            async saveGameData(data) {
+                return new Promise((resolve, reject) => {
+                    if (!this.db) {
+                        reject('Database not initialized');
+                        return;
+                    }
+                    
+                    const transaction = this.db.transaction(['gameData'], 'readwrite');
+                    const store = transaction.objectStore('gameData');
+                    
+                    // Add timestamp and version
+                    const gameData = {
+                        id: 'currentGame',
+                        userId: this.getUserId(),
+                        data: data,
+                        timestamp: Date.now(),
+                        version: this.dbVersion
+                    };
+                    
+                    const request = store.put(gameData);
+                    
+                    request.onsuccess = () => resolve();
+                    request.onerror = (event) => reject(event.target.error);
+                });
+            }
+            
+            // Load game data
+            async loadGameData() {
+                return new Promise((resolve, reject) => {
+                    if (!this.db) {
+                        resolve(null);
+                        return;
+                    }
+                    
+                    const transaction = this.db.transaction(['gameData'], 'readonly');
+                    const store = transaction.objectStore('gameData');
+                    const request = store.get('currentGame');
+                    
+                    request.onsuccess = (event) => {
+                        const result = event.target.result;
+                        resolve(result ? result.data : null);
+                    };
+                    
+                    request.onerror = (event) => reject(event.target.error);
+                });
+            }
+            
+            // Add referral
+            async addReferral(referralData) {
+                return new Promise((resolve, reject) => {
+                    if (!this.db) {
+                        reject('Database not initialized');
+                        return;
+                    }
+                    
+                    const transaction = this.db.transaction(['referrals'], 'readwrite');
+                    const store = transaction.objectStore('referrals');
+                    
+                    const referral = {
+                        referrerId: this.getUserId(),
+                        referredId: referralData.referredId || this.generateUserId(),
+                        code: referralData.code,
+                        bonusApplied: referralData.bonusApplied || false,
+                        earnings: referralData.earnings || 0,
+                        starsEarned: referralData.starsEarned || 0,
+                        date: Date.now(),
+                        status: 'active'
+                    };
+                    
+                    const request = store.add(referral);
+                    
+                    request.onsuccess = (event) => {
+                        resolve(event.target.result);
+                    };
+                    
+                    request.onerror = (event) => {
+                        // Check if it's a duplicate error
+                        if (event.target.error.name === 'ConstraintError') {
+                            reject('Этот код уже был использован');
+                        } else {
+                            reject(event.target.error);
+                        }
+                    };
+                });
+            }
+            
+            // Get user's referrals
+            async getUserReferrals() {
+                return new Promise((resolve, reject) => {
+                    if (!this.db) {
+                        resolve([]);
+                        return;
+                    }
+                    
+                    const transaction = this.db.transaction(['referrals'], 'readonly');
+                    const store = transaction.objectStore('referrals');
+                    const index = store.index('referrerId');
+                    const request = index.getAll(this.getUserId());
+                    
+                    request.onsuccess = (event) => {
+                        resolve(event.target.result || []);
+                    };
+                    
+                    request.onerror = (event) => reject(event.target.error);
+                });
+            }
+            
+            // Check if code exists
+            async checkReferralCode(code) {
+                return new Promise((resolve, reject) => {
+                    if (!this.db) {
+                        resolve(null);
+                        return;
+                    }
+                    
+                    const transaction = this.db.transaction(['referrals'], 'readonly');
+                    const store = transaction.objectStore('referrals');
+                    const index = store.index('code');
+                    const request = index.get(code);
+                    
+                    request.onsuccess = (event) => {
+                        resolve(event.target.result);
+                    };
+                    
+                    request.onerror = (event) => reject(event.target.error);
+                });
+            }
+            
+            // Add transaction
+            async addTransaction(transactionData) {
+                return new Promise((resolve, reject) => {
+                    if (!this.db) {
+                        reject('Database not initialized');
+                        return;
+                    }
+                    
+                    const transaction = this.db.transaction(['transactions'], 'readwrite');
+                    const store = transaction.objectStore('transactions');
+                    
+                    const tx = {
+                        userId: this.getUserId(),
+                        type: transactionData.type, // 'tap', 'spin', 'referral', 'upgrade', 'booster'
+                        amount: transactionData.amount,
+                        description: transactionData.description,
+                        timestamp: Date.now()
+                    };
+                    
+                    const request = store.add(tx);
+                    
+                    request.onsuccess = () => resolve();
+                    request.onerror = (event) => reject(event.target.error);
+                });
+            }
+            
+            // Get user ID (generates one if doesn't exist)
+            getUserId() {
+                let userId = localStorage.getItem('galaxyfarm_userId');
+                if (!userId) {
+                    userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    localStorage.setItem('galaxyfarm_userId', userId);
+                }
+                return userId;
+            }
+            
+            // Generate new user ID for referrals
+            generateUserId() {
+                return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            }
+        }
+        
         // ========== GALAXYFARM GAME DATA ==========
         let gameData = {
             balance: 1000,
@@ -898,9 +1398,11 @@
             totalSpins: 0,
             referrals: 0,
             refEarnings: 0,
-            referralCode: "GF" + Math.floor(100000 + Math.random() * 900000),
+            refStarsEarned: 0,
+            referralCode: "GF" + Math.floor(100000 + Math.random() * 900000).toString().substr(0, 6),
             lastUpdate: Date.now(),
-            lastSpinTime: 0, // Track last spin time for daily spins
+            lastSpinTime: 0,
+            usedCodes: [],
             upgrades: {
                 click: 0,
                 auto: 0,
@@ -915,11 +1417,13 @@
                 autoClick: {active: false, duration: 0, endTime: 0}
             },
             criticalChance: 0,
-            luckyChance: 0,
-            usedReferralCode: false
+            luckyChance: 0
         };
         
-        // NEW SPIN PRIZES (as requested)
+        // Initialize database
+        const db = new GalaxyFarmDB();
+        
+        // NEW SPIN PRIZES
         const NEW_SPIN_PRIZES = [
             {name: "1★", type: "stars", amount: 1, color: "#ffd700"},
             {name: "3★", type: "stars", amount: 3, color: "#ffd700"},
@@ -933,7 +1437,7 @@
             {name: "🎰", type: "spin", amount: 1, color: "#9d4edd"}
         ];
         
-        // Upgrades with PRICES
+        // Upgrades
         const UPGRADES = [
             {
                 id: 'click',
@@ -1032,20 +1536,24 @@
         function formatNumber(num) {
             if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
             if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-            return Math.floor(num); // Always return integer to avoid decimal issues
+            return Math.floor(num);
         }
         
-        function updateUI() {
+        async function updateUI() {
             // Update stats
             document.getElementById('balance').textContent = formatNumber(gameData.balance);
             document.getElementById('energy').textContent = Math.floor(gameData.energy);
             document.getElementById('max-energy').textContent = gameData.maxEnergy;
             document.getElementById('energy-text').textContent = `${Math.floor(gameData.energy)}/${gameData.maxEnergy}`;
             document.getElementById('stars').textContent = gameData.stars;
-            document.getElementById('income-per-hour').textContent = formatNumber(gameData.autoIncome);
+            document.getElementById('referral-count').textContent = gameData.referrals;
             document.getElementById('tap-per-click').textContent = `+${gameData.clickPower} коин за поглаживание`;
             document.getElementById('free-spins-new').textContent = gameData.freeSpins;
             document.getElementById('spin-stars-new').textContent = gameData.stars;
+            document.getElementById('referral-code-display').textContent = gameData.referralCode;
+            document.getElementById('total-referrals').textContent = gameData.referrals;
+            document.getElementById('ref-earnings').textContent = formatNumber(gameData.refEarnings);
+            document.getElementById('ref-stars').textContent = gameData.refStarsEarned;
             
             // Update energy bar
             const energyPercent = (gameData.energy / gameData.maxEnergy) * 100;
@@ -1080,21 +1588,21 @@
                 spinBtn.textContent = 'НЕТ СПИНОВ';
                 spinBtn.disabled = true;
             }
+            
+            // Load referral list
+            await loadReferralList();
         }
         
         function switchScreen(screenName) {
-            // Hide all screens
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
             });
             
-            // Show target screen
             const targetScreen = document.getElementById(`${screenName}-screen`);
             if (targetScreen) {
                 targetScreen.classList.add('active');
             }
             
-            // Update navigation
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -1104,19 +1612,195 @@
                 targetBtn.classList.add('active');
             }
             
-            // Load screen data
             if (screenName === 'spin') {
                 createNewSpinWheel();
             } else if (screenName === 'upgrade') {
                 loadUpgrades();
             } else if (screenName === 'boosters') {
                 loadBoosters();
+            } else if (screenName === 'referral') {
+                loadReferralList();
             }
         }
         
-        // ========== FIXED ENERGY SYSTEM ==========
-        document.getElementById('tap-btn').addEventListener('click', function(e) {
-            // Fix energy bug by rounding to integer
+        // ========== REFERRAL SYSTEM ==========
+        async function copyReferralCode() {
+            try {
+                await navigator.clipboard.writeText(gameData.referralCode);
+                showNotification(`✅ Реферальный код скопирован: ${gameData.referralCode}`);
+                
+                // Save to transaction log
+                await db.addTransaction({
+                    type: 'referral',
+                    amount: 0,
+                    description: 'Код скопирован'
+                });
+            } catch (err) {
+                showNotification("❌ Ошибка копирования кода");
+            }
+        }
+        
+        async function activateFriendCode() {
+            const input = document.getElementById('friend-code-input');
+            const code = input.value.trim().toUpperCase();
+            const statusDiv = document.getElementById('code-status');
+            
+            if (!code) {
+                statusDiv.textContent = "❌ Введите реферальный код!";
+                statusDiv.style.color = "#ff4757";
+                return;
+            }
+            
+            if (code === gameData.referralCode) {
+                statusDiv.textContent = "❌ Нельзя использовать свой же код!";
+                statusDiv.style.color = "#ff4757";
+                return;
+            }
+            
+            if (gameData.usedCodes.includes(code)) {
+                statusDiv.textContent = "❌ Вы уже активировали этот код!";
+                statusDiv.style.color = "#ff4757";
+                return;
+            }
+            
+            if (!code.startsWith('GF') || code.length !== 8) {
+                statusDiv.textContent = "❌ Неверный формат кода! Код должен быть типа: GF123456";
+                statusDiv.style.color = "#ff4757";
+                return;
+            }
+            
+            // Check in database
+            try {
+                const existingRef = await db.checkReferralCode(code);
+                if (existingRef) {
+                    statusDiv.textContent = "❌ Этот код уже был использован!";
+                    statusDiv.style.color = "#ff4757";
+                    return;
+                }
+                
+                // Add new referral to database
+                await db.addReferral({
+                    code: code,
+                    bonusApplied: true
+                });
+                
+                // Apply bonus to current user
+                const bonusCoins = 300;
+                const bonusStars = 10;
+                
+                gameData.balance += bonusCoins;
+                gameData.stars += bonusStars;
+                gameData.usedCodes.push(code);
+                
+                // Save transaction
+                await db.addTransaction({
+                    type: 'referral',
+                    amount: bonusCoins,
+                    description: `Активация кода ${code}: +${bonusCoins} коинов, +${bonusStars} звёзд`
+                });
+                
+                statusDiv.textContent = `✅ Код активирован! +${bonusCoins} коинов + ${bonusStars} звёзд!`;
+                statusDiv.style.color = "#00d2a0";
+                
+                showNotification(`🎁 Код активирован! Получено: +${bonusCoins} коинов и +${bonusStars} звёзд!`);
+                
+                input.value = '';
+                
+                updateUI();
+                saveGame();
+                
+            } catch (err) {
+                statusDiv.textContent = `❌ Ошибка: ${err}`;
+                statusDiv.style.color = "#ff4757";
+            }
+        }
+        
+        async function loadReferralList() {
+            try {
+                const referrals = await db.getUserReferrals();
+                const listDiv = document.getElementById('referral-list');
+                
+                if (referrals.length === 0) {
+                    listDiv.innerHTML = `
+                        <div style="text-align: center; padding: 30px; color: #666;">
+                            <i class="fas fa-user-friends" style="font-size: 48px; margin-bottom: 15px;"></i>
+                            <div>У вас пока нет рефералов</div>
+                            <div style="font-size: 14px; margin-top: 10px;">Пригласите друзей по своему коду!</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                listDiv.innerHTML = '';
+                
+                referrals.forEach((ref, index) => {
+                    const referralItem = document.createElement('div');
+                    referralItem.className = 'referral-item';
+                    
+                    // Generate avatar color based on index
+                    const colors = ['#9d4edd', '#00b4ff', '#ffd700', '#00d2a0', '#ff4757'];
+                    const color = colors[index % colors.length];
+                    
+                    // Format date
+                    const date = new Date(ref.date);
+                    const formattedDate = `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
+                    
+                    referralItem.innerHTML = `
+                        <div class="referral-avatar" style="background: linear-gradient(45deg, ${color}, ${color}80);">
+                            ${String.fromCharCode(65 + index)}
+                        </div>
+                        <div class="referral-info">
+                            <div class="referral-name">Друг #${index + 1}</div>
+                            <div class="referral-date">${formattedDate}</div>
+                        </div>
+                        <div class="referral-earned">
+                            +${ref.earnings || 0}💰
+                        </div>
+                    `;
+                    
+                    listDiv.appendChild(referralItem);
+                });
+                
+            } catch (err) {
+                console.error('Error loading referral list:', err);
+            }
+        }
+        
+        async function shareReferral() {
+            const shareText = `🎮 *Присоединяйся ко мне в GalaxyFarm!* 🐱\n\nЗарабатывай реальные деньги гладя котиков!\n💰 *Твой бонус при регистрации: 300 коинов + 10 звёзд!*\n\n🎯 Мой реферальный код: *${gameData.referralCode}*\n\n🔗 https://galaxyfarm.com/?ref=${gameData.referralCode}`;
+            
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'GalaxyFarm - Зарабатывай гладя котиков!',
+                        text: shareText,
+                        url: `https://galaxyfarm.com/?ref=${gameData.referralCode}`
+                    });
+                    
+                    showNotification("✅ Приглашение отправлено!");
+                    
+                    await db.addTransaction({
+                        type: 'referral',
+                        amount: 0,
+                        description: 'Реферальная ссылка отправлена'
+                    });
+                    
+                } catch (err) {
+                    // User cancelled share
+                    console.log('Share cancelled:', err);
+                }
+            } else {
+                try {
+                    await navigator.clipboard.writeText(shareText);
+                    showNotification("✅ Ссылка скопирована! Отправь её друзьям!");
+                } catch (err) {
+                    showNotification("❌ Ошибка копирования ссылки");
+                }
+            }
+        }
+        
+        // ========== GAME MECHANICS ==========
+        document.getElementById('tap-btn').addEventListener('click', async function(e) {
             gameData.energy = Math.max(0, Math.floor(gameData.energy));
             
             if (gameData.energy <= 0 && !gameData.boosters.unlimitedEnergy.active) {
@@ -1124,44 +1808,45 @@
                 return;
             }
             
-            // Deduct energy if booster not active
             if (!gameData.boosters.unlimitedEnergy.active) {
                 gameData.energy -= 1;
             }
             
-            // Fix: Ensure energy doesn't go below 0
             gameData.energy = Math.max(0, gameData.energy);
-            
             gameData.totalClicks += 1;
             
-            // Calculate base earned
             let earned = gameData.clickPower;
             
-            // Apply critical hit chance
             if (Math.random() < (gameData.criticalChance / 100)) {
                 earned *= 2;
                 showNotification("🎯 Критический удар! x2 урон!");
             }
             
-            // Apply booster multiplier
             if (gameData.boosters.x2coins.active) {
                 earned *= 2;
             }
             
-            // Apply lucky chance
             if (Math.random() < (gameData.luckyChance / 100)) {
                 const bonus = Math.floor(earned * 0.5);
                 earned += bonus;
                 showNotification(`🍀 Удача! +${bonus} бонусных коинов!`);
             }
             
-            // Add coins
             gameData.balance += earned;
             
-            // Create cat animation
             createCatAnimation(e.clientX, e.clientY, earned);
             
-            // Update UI
+            // Save transaction
+            try {
+                await db.addTransaction({
+                    type: 'tap',
+                    amount: earned,
+                    description: `Клик: +${earned} коинов`
+                });
+            } catch (err) {
+                console.error('Error saving transaction:', err);
+            }
+            
             updateUI();
             saveGame();
         });
@@ -1188,18 +1873,16 @@
             }, 1000);
         }
         
-        // ========== NEW SPIN WHEEL SYSTEM ==========
+        // ========== SPIN WHEEL ==========
         function createNewSpinWheel() {
             const wheel = document.getElementById('spin-wheel-new');
             wheel.innerHTML = '';
             
-            // Add center
             const center = document.createElement('div');
             center.className = 'wheel-center';
             center.textContent = 'SPIN';
             wheel.appendChild(center);
             
-            // Create wheel items
             const totalPrizes = NEW_SPIN_PRIZES.length;
             const angle = 360 / totalPrizes;
             
@@ -1219,13 +1902,11 @@
             });
         }
         
-        function doSpinNew() {
-            // Check daily spin availability
+        async function doSpinNew() {
             const now = Date.now();
             const lastSpin = gameData.lastSpinTime || 0;
             const oneDay = 24 * 60 * 60 * 1000;
             
-            // Reset free spins if 24 hours passed
             if (now - lastSpin >= oneDay) {
                 gameData.freeSpins = 1;
                 gameData.lastSpinTime = now;
@@ -1240,23 +1921,19 @@
             const resultDiv = document.getElementById('spin-result-new');
             const wheel = document.getElementById('spin-wheel-new');
             
-            // Use spin
             gameData.freeSpins -= 1;
             gameData.totalSpins += 1;
             spinButton.disabled = true;
             
-            // Random prize with weighted probabilities
             const prizeIndex = getWeightedPrizeIndex();
             const prize = NEW_SPIN_PRIZES[prizeIndex];
             
-            // Spin animation
             const totalRotation = 1080 + (prizeIndex * (360 / NEW_SPIN_PRIZES.length));
             
             wheel.style.transition = 'transform 3s cubic-bezier(0.2, 0.8, 0.3, 1)';
             wheel.style.transform = `rotate(${totalRotation}deg)`;
             
-            // Apply prize after animation
-            setTimeout(() => {
+            setTimeout(async () => {
                 let prizeAmount = prize.amount;
                 let prizeText = prize.name;
                 
@@ -1279,14 +1956,22 @@
                         break;
                 }
                 
-                // Show result with animation
                 resultDiv.textContent = `🎉 Вы выиграли: ${prizeText}!`;
                 resultDiv.style.color = prize.color;
                 
-                // Show notification
                 showNotification(`🎰 Получен приз: ${prizeText}`);
                 
-                // Reset button
+                // Save transaction
+                try {
+                    await db.addTransaction({
+                        type: 'spin',
+                        amount: prizeAmount,
+                        description: `Спин: ${prizeText}`
+                    });
+                } catch (err) {
+                    console.error('Error saving transaction:', err);
+                }
+                
                 setTimeout(() => {
                     updateUI();
                     saveGame();
@@ -1302,8 +1987,7 @@
         }
         
         function getWeightedPrizeIndex() {
-            // Weighted probabilities for prizes
-            const weights = [15, 12, 10, 8, 15, 10, 10, 8, 7, 5]; // Total = 100
+            const weights = [15, 12, 10, 8, 15, 10, 10, 8, 7, 5];
             const totalWeight = weights.reduce((a, b) => a + b, 0);
             let random = Math.random() * totalWeight;
             
@@ -1331,7 +2015,7 @@
         }
         
         // ========== UPGRADES SYSTEM ==========
-        function loadUpgrades() {
+        async function loadUpgrades() {
             const container = document.getElementById('upgrades-container');
             container.innerHTML = '';
             
@@ -1364,7 +2048,7 @@
             });
         }
         
-        function buyUpgrade(type, price) {
+        async function buyUpgrade(type, price) {
             if (gameData.balance < price) {
                 showNotification(`❌ Не хватает ${price - gameData.balance} коинов!`);
                 return;
@@ -1373,7 +2057,6 @@
             gameData.balance -= price;
             gameData.upgrades[type] = (gameData.upgrades[type] || 0) + 1;
             
-            // Apply upgrade effects
             switch(type) {
                 case 'click':
                     gameData.clickPower += 1;
@@ -1395,6 +2078,17 @@
                     gameData.luckyChance += 1;
                     showNotification(`✅ Удача котика увеличена до ${gameData.luckyChance}%!`);
                     break;
+            }
+            
+            // Save transaction
+            try {
+                await db.addTransaction({
+                    type: 'upgrade',
+                    amount: -price,
+                    description: `Покупка улучшения ${type}`
+                });
+            } catch (err) {
+                console.error('Error saving transaction:', err);
             }
             
             updateUI();
@@ -1436,7 +2130,7 @@
             });
         }
         
-        function activateBooster(boosterId) {
+        async function activateBooster(boosterId) {
             const booster = BOOSTERS.find(b => b.id === boosterId);
             
             if (!booster) return;
@@ -1460,6 +2154,17 @@
             
             showNotification(`✅ Бустер "${booster.name}" активирован на ${booster.duration} минут!`);
             
+            // Save transaction
+            try {
+                await db.addTransaction({
+                    type: 'booster',
+                    amount: -booster.price,
+                    description: `Активация бустера ${booster.name}`
+                });
+            } catch (err) {
+                console.error('Error saving transaction:', err);
+            }
+            
             if (boosterId === 'autoClick') {
                 startAutoClicker();
             }
@@ -1476,7 +2181,6 @@
                     return;
                 }
                 
-                // Simulate 5 clicks per second
                 for (let i = 0; i < 5; i++) {
                     setTimeout(() => {
                         if (gameData.energy > 0 || gameData.boosters.unlimitedEnergy.active) {
@@ -1517,12 +2221,12 @@
             }
         }
         
-        // ========== FIXED ENERGY RECOVERY SYSTEM ==========
+        // ========== ENERGY RECOVERY ==========
         function updateEnergyRecovery() {
             if (gameData.energy < gameData.maxEnergy) {
-                const rechargeRate = 1 + (gameData.upgrades.recharge || 0) * 0.5; // 1-3.5 energy per minute
-                gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + (rechargeRate / 60)); // Per second
-                gameData.energy = Math.floor(gameData.energy * 100) / 100; // Keep 2 decimal places
+                const rechargeRate = 1 + (gameData.upgrades.recharge || 0) * 0.5;
+                gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + (rechargeRate / 60));
+                gameData.energy = Math.floor(gameData.energy * 100) / 100;
                 updateUI();
             }
         }
@@ -1561,59 +2265,86 @@
         }
         
         // ========== SAVE/LOAD GAME ==========
-        function saveGame() {
-            localStorage.setItem('galaxyfarm_save', JSON.stringify({
-                data: gameData,
-                timestamp: Date.now()
-            }));
+        async function saveGame() {
+            try {
+                await db.saveGameData(gameData);
+                console.log('Game saved to database');
+            } catch (err) {
+                console.error('Error saving game:', err);
+                // Fallback to localStorage
+                localStorage.setItem('galaxyfarm_save', JSON.stringify({
+                    data: gameData,
+                    timestamp: Date.now()
+                }));
+            }
         }
         
-        function loadGame() {
-            const saved = localStorage.getItem('galaxyfarm_save');
-            if (saved) {
-                const saveData = JSON.parse(saved);
-                const timePassed = Date.now() - saveData.timestamp;
+        async function loadGame() {
+            try {
+                // Try to load from database first
+                const dbData = await db.loadGameData();
                 
-                gameData = {...gameData, ...saveData.data};
+                if (dbData) {
+                    gameData = {...gameData, ...dbData};
+                    console.log('Game loaded from database');
+                } else {
+                    // Fallback to localStorage
+                    const saved = localStorage.getItem('galaxyfarm_save');
+                    if (saved) {
+                        const saveData = JSON.parse(saved);
+                        const timePassed = Date.now() - saveData.timestamp;
+                        
+                        gameData = {...gameData, ...saveData.data};
+                        
+                        if (timePassed > 60000) {
+                            const minutesPassed = timePassed / (1000 * 60);
+                            
+                            if (gameData.autoIncome > 0) {
+                                const income = Math.floor(gameData.autoIncome * (minutesPassed / 60));
+                                if (income > 0) {
+                                    gameData.balance += income;
+                                    showNotification(`💰 Авто-доход за время отсутствия: +${income} коинов`);
+                                }
+                            }
+                            
+                            const rechargeRate = 1 + (gameData.upgrades.recharge || 0) * 0.5;
+                            const energyGained = Math.min(
+                                gameData.maxEnergy - gameData.energy,
+                                minutesPassed * rechargeRate
+                            );
+                            gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + energyGained);
+                            
+                            gameData.lastUpdate = Date.now();
+                        }
+                    }
+                    
+                    // Save to database for future use
+                    await db.saveGameData(gameData);
+                }
                 
                 // Fix energy bug on load
                 gameData.energy = Math.max(0, Math.floor(gameData.energy));
                 
-                // Calculate offline income and energy recovery
-                if (timePassed > 60000) {
-                    const minutesPassed = timePassed / (1000 * 60);
-                    
-                    // Offline income
-                    if (gameData.autoIncome > 0) {
-                        const income = Math.floor(gameData.autoIncome * (minutesPassed / 60));
-                        if (income > 0) {
-                            gameData.balance += income;
-                            showNotification(`💰 Авто-доход за время отсутствия: +${income} коинов`);
-                        }
-                    }
-                    
-                    // Energy recovery
-                    const rechargeRate = 1 + (gameData.upgrades.recharge || 0) * 0.5;
-                    const energyGained = Math.min(
-                        gameData.maxEnergy - gameData.energy,
-                        minutesPassed * rechargeRate
-                    );
-                    gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + energyGained);
-                    
-                    gameData.lastUpdate = Date.now();
-                }
+            } catch (err) {
+                console.error('Error loading game:', err);
             }
         }
         
         // ========== INITIALIZATION ==========
-        function init() {
-            loadGame();
-            updateUI();
+        async function init() {
+            try {
+                await db.init();
+                console.log('Database ready');
+            } catch (err) {
+                console.error('Database initialization failed:', err);
+            }
+            
+            await loadGame();
+            await updateUI();
             createNewSpinWheel();
             loadUpgrades();
             loadBoosters();
             
-            // Setup navigation
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 if (!btn.classList.contains('disabled')) {
                     btn.addEventListener('click', function() {
@@ -1623,11 +2354,10 @@
                 }
             });
             
-            // Start timers
-            setInterval(checkBoosters, 10000); // Check boosters every 10 seconds
-            setInterval(updateEnergyRecovery, 1000); // Update energy every second (FIXED)
+            setInterval(checkBoosters, 10000);
+            setInterval(updateEnergyRecovery, 1000);
+            setInterval(saveGame, 30000);
             
-            // Welcome
             setTimeout(() => {
                 showNotification("🐱 Глади котика чтобы заработать коины!");
             }, 1000);
@@ -1635,7 +2365,6 @@
         
         document.addEventListener('DOMContentLoaded', init);
         window.addEventListener('beforeunload', saveGame);
-        setInterval(saveGame, 30000);
     </script>
 </body>
 </html>
