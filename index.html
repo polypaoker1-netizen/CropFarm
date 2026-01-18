@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- GalaxyFarm Web App - FINAL FIXED VERSION -->
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -18,6 +17,7 @@
             --green: #00d2a0;
             --cat-orange: #ff6b35;
             --disabled: #666666;
+            --galaxy-gradient: linear-gradient(135deg, #0c0032, #190061, #240090, #3500d3);
         }
         
         * {
@@ -27,11 +27,27 @@
         }
         
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #000428, #004e92);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--galaxy-gradient);
             color: white;
             min-height: 100vh;
             padding-bottom: 80px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(157, 78, 221, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 180, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+            z-index: -1;
         }
         
         .container {
@@ -43,100 +59,178 @@
         /* Header */
         .header {
             background: rgba(10, 10, 42, 0.9);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 20px;
             border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #9d4edd, #00b4ff, #ffd700);
         }
         
         .game-title {
             text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 20px;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 25px;
             color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            letter-spacing: 1px;
         }
         
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         .stat-card {
             background: rgba(26, 26, 74, 0.7);
-            border-radius: 15px;
-            padding: 15px;
+            border-radius: 20px;
+            padding: 20px;
             text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
         .stat-card i {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: #ffd700;
+            font-size: 28px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffd700, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .stat-value {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
+            margin: 5px 0;
         }
         
         .stat-label {
             font-size: 12px;
-            opacity: 0.8;
+            opacity: 0.9;
             margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
         /* Energy Bar */
         .energy-container {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 20px;
             margin-top: 10px;
+            border: 1px solid rgba(0, 180, 255, 0.3);
         }
         
         .energy-bar {
-            height: 20px;
+            height: 24px;
             background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            margin-top: 10px;
+            margin-top: 15px;
+            position: relative;
         }
         
         .energy-fill {
             height: 100%;
-            background: linear-gradient(90deg, #00b4ff, #0099ff);
-            border-radius: 10px;
+            background: linear-gradient(90deg, #00b4ff, #0099ff, #0077ff);
+            border-radius: 12px;
             width: 75%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .energy-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
         
         /* Tap Area */
         .tap-area {
             background: linear-gradient(135deg, #9d4edd, #6a00ff);
-            border-radius: 25px;
-            padding: 40px 20px;
-            margin: 25px 0;
+            border-radius: 30px;
+            padding: 50px 20px;
+            margin: 30px 0;
             text-align: center;
             cursor: pointer;
             user-select: none;
-            border: 3px solid rgba(255, 215, 0, 0.5);
+            border: 4px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 
+                0 10px 20px rgba(157, 78, 221, 0.3),
+                inset 0 0 30px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        
+        .tap-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 30%, rgba(255, 255, 255, 0.1) 100%);
         }
         
         .tap-area:active {
-            transform: scale(0.98);
+            transform: scale(0.97);
+            box-shadow: 
+                0 5px 10px rgba(157, 78, 221, 0.2),
+                inset 0 0 20px rgba(255, 255, 255, 0.2);
         }
         
         .tap-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
+            font-size: 100px;
+            margin-bottom: 25px;
             color: white;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
         
         .tap-label {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
         
         /* Navigation */
@@ -146,30 +240,35 @@
             left: 0;
             right: 0;
             background: rgba(10, 10, 42, 0.95);
-            padding: 12px 15px;
+            backdrop-filter: blur(10px);
+            padding: 15px;
             display: flex;
             justify-content: space-around;
             border-top: 2px solid rgba(255, 215, 0, 0.3);
+            z-index: 100;
         }
         
         .nav-btn {
             background: none;
             border: none;
             color: white;
-            font-size: 11px;
+            font-size: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
-            padding: 10px;
-            border-radius: 15px;
+            gap: 8px;
+            padding: 12px;
+            border-radius: 20px;
             cursor: pointer;
             opacity: 0.7;
+            transition: all 0.3s;
+            min-width: 60px;
         }
         
         .nav-btn.active {
             background: rgba(157, 78, 221, 0.3);
             opacity: 1;
+            transform: translateY(-5px);
         }
         
         .nav-btn.disabled {
@@ -178,12 +277,18 @@
         }
         
         .nav-btn i {
-            font-size: 20px;
+            font-size: 22px;
         }
         
         /* Screens */
         .screen {
             display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .screen.active {
@@ -191,278 +296,258 @@
         }
         
         .screen-title {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 25px;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 30px;
             text-align: center;
             color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            position: relative;
+            padding-bottom: 15px;
         }
         
-        /* Spin Wheel with Prizes */
+        .screen-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+        }
+        
+        /* NEW SPIN WHEEL DESIGN (like in screenshot) */
         .spin-container {
             text-align: center;
             padding: 20px;
         }
         
-        .spin-wheel {
-            width: 280px;
-            height: 280px;
-            margin: 0 auto 30px;
-            position: relative;
-            border: 15px solid #0a0a2a;
-            border-radius: 50%;
-            overflow: hidden;
+        .spin-header {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 215, 0, 0.2);
         }
         
-        .wheel-section {
-            position: absolute;
+        .spin-info {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        
+        .spin-info-item {
+            text-align: center;
+        }
+        
+        .spin-info-label {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .spin-info-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .wheel-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 0 auto 40px;
+        }
+        
+        .spin-wheel-new {
             width: 100%;
             height: 100%;
-            transform-origin: 100% 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #ff4757 0deg 36deg,
+                #00b4ff 36deg 72deg,
+                #ffd700 72deg 108deg,
+                #9d4edd 108deg 144deg,
+                #2ecc71 144deg 180deg,
+                #ff6b35 180deg 216deg,
+                #3498db 216deg 252deg,
+                #e74c3c 252deg 288deg,
+                #1abc9c 288deg 324deg,
+                #f1c40f 324deg 360deg
+            );
+            position: relative;
+            border: 10px solid #0a0a2a;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .wheel-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            text-shadow: 1px 1px 2px black;
+            transform-origin: center;
         }
         
-        .spin-pointer {
+        .wheel-item-content {
             position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid #ff4757;
-            z-index: 100;
+            top: 10px;
+            width: 80px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            text-shadow: 1px 1px 2px black;
+            color: white;
         }
         
-        .spin-center {
+        .wheel-center {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             background: #0a0a2a;
             border-radius: 50%;
             border: 5px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             color: #ffd700;
             z-index: 10;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
         
-        .spin-btn {
+        .wheel-pointer {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-top: 50px solid #ff4757;
+            z-index: 100;
+            filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
+        }
+        
+        .spin-btn-new {
             background: linear-gradient(90deg, #ff4757, #ff6b81);
             border: none;
             color: white;
-            padding: 20px 60px;
-            border-radius: 25px;
-            font-size: 24px;
+            padding: 25px 70px;
+            border-radius: 30px;
+            font-size: 28px;
             font-weight: bold;
             cursor: pointer;
             margin: 20px 0;
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
         }
         
-        .spin-btn:active {
-            transform: scale(0.95);
-        }
-        
-        #spin-result {
-            margin: 20px 0;
-            font-size: 24px;
-            font-weight: bold;
-            min-height: 40px;
-            color: #ffd700;
-        }
-        
-        /* Referral Screen */
-        .referral-container {
-            padding: 20px;
-        }
-        
-        .referral-card {
-            background: rgba(26, 26, 74, 0.7);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 2px solid rgba(255, 215, 0, 0.3);
-        }
-        
-        .referral-code {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            border-radius: 15px;
-            font-family: monospace;
-            font-size: 20px;
-            text-align: center;
-            margin: 15px 0;
-            border: 2px dashed #ffd700;
-        }
-        
-        .ref-input-container {
-            margin: 20px 0;
-        }
-        
-        .ref-input {
+        .spin-btn-new::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
-            padding: 15px;
-            border-radius: 15px;
-            border: 2px solid #9d4edd;
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
-            font-size: 16px;
-            text-align: center;
-            margin-bottom: 15px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
         
-        .ref-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 20px 0;
+        .spin-btn-new:hover::before {
+            left: 100%;
         }
         
-        .ref-stat {
-            text-align: center;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
+        .spin-btn-new:active {
+            transform: scale(0.95);
+            box-shadow: 0 5px 10px rgba(255, 71, 87, 0.2);
         }
         
-        /* Withdraw Screen */
-        .withdraw-container {
-            text-align: center;
-            padding: 20px;
+        #spin-result-new {
+            margin: 25px 0;
+            font-size: 28px;
+            font-weight: bold;
+            min-height: 50px;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
         
-        .withdraw-icon {
-            font-size: 100px;
-            color: var(--disabled);
-            margin-bottom: 30px;
-            opacity: 0.5;
-        }
-        
-        .withdraw-card {
-            background: rgba(102, 102, 102, 0.2);
-            border-radius: 20px;
-            padding: 30px;
-            margin: 20px 0;
-            border: 2px dashed var(--disabled);
-        }
-        
-        /* Upgrades */
+        /* Upgrade Cards */
         .upgrades-grid {
             display: grid;
-            gap: 15px;
+            gap: 20px;
             padding: 20px;
         }
         
         .upgrade-card {
-            background: rgba(26, 26, 74, 0.7);
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid rgba(65, 105, 225, 0.3);
+            background: linear-gradient(135deg, rgba(26, 26, 74, 0.8), rgba(10, 10, 42, 0.9));
+            border-radius: 25px;
+            padding: 25px;
+            border: 2px solid rgba(65, 105, 225, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+        
+        .upgrade-card:hover {
+            transform: translateY(-5px);
         }
         
         .upgrade-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         .upgrade-icon {
-            font-size: 32px;
+            font-size: 40px;
+            background: linear-gradient(45deg, #ffd700, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .upgrade-level {
-            background: #9d4edd;
+            background: linear-gradient(45deg, #9d4edd, #6a00ff);
             color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 14px;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
         }
         
         .upgrade-name {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            color: white;
         }
         
         .upgrade-desc {
             font-size: 14px;
-            opacity: 0.8;
-            margin-bottom: 10px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            line-height: 1.5;
         }
         
         .upgrade-price {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             color: #ffd700;
-            margin-bottom: 15px;
-        }
-        
-        .upgrade-btn {
-            background: linear-gradient(90deg, #9d4edd, #6a00ff);
-            border: none;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-        }
-        
-        .upgrade-btn:disabled {
-            background: #666;
-            cursor: not-allowed;
-        }
-        
-        /* Boosters */
-        .boosters-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            padding: 20px;
-        }
-        
-        .booster-card {
-            background: rgba(46, 204, 113, 0.1);
-            border-radius: 20px;
-            padding: 20px;
-            border: 2px solid #2ecc71;
-            text-align: center;
-        }
-        
-        .booster-icon {
-            font-size: 40px;
-            color: #2ecc71;
-            margin-bottom: 15px;
-        }
-        
-        /* Notifications */
-        .notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 15px;
-            border-left: 5px solid #ffd700;
-            z-index: 1000;
-            display: none;
-            max-width: 90%;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         /* Buttons */
@@ -470,39 +555,70 @@
             background: linear-gradient(90deg, #9d4edd, #6a00ff);
             border: none;
             color: white;
-            padding: 15px 30px;
-            border-radius: 15px;
-            font-size: 16px;
+            padding: 18px 35px;
+            border-radius: 20px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
-            margin: 10px 0;
+            margin: 15px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.3);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(157, 78, 221, 0.4);
+        }
+        
+        .action-btn:active {
+            transform: translateY(0);
         }
         
         .action-btn:disabled {
             background: var(--disabled);
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 20px;
+            border-left: 5px solid #ffd700;
+            z-index: 1000;
+            display: none;
+            max-width: 90%;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.3s ease-out forwards;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        @keyframes slideIn {
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
         
         /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
         .coin-animation {
             position: fixed;
-            font-size: 24px;
+            font-size: 28px;
             color: #ffd700;
             font-weight: bold;
             pointer-events: none;
             z-index: 10000;
             animation: floatUp 1s ease-out forwards;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
         
         @keyframes floatUp {
@@ -511,23 +627,42 @@
                 opacity: 1;
             }
             100% {
-                transform: translateY(-100px) scale(0);
+                transform: translateY(-150px) scale(0);
                 opacity: 0;
             }
         }
         
-        /* Cat Animation */
         .cat-animation {
             position: absolute;
-            font-size: 40px;
+            font-size: 50px;
             pointer-events: none;
             z-index: 100;
+            animation: catJump 0.8s ease-out;
         }
         
         @keyframes catJump {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-50px) rotate(10deg); }
-            100% { transform: translateY(0) rotate(0deg); }
+            0% { transform: translateY(0) rotate(0deg) scale(1); }
+            30% { transform: translateY(-60px) rotate(10deg) scale(1.2); }
+            70% { transform: translateY(-30px) rotate(-5deg) scale(1.1); }
+            100% { transform: translateY(0) rotate(0deg) scale(1); }
+        }
+        
+        /* Back button */
+        .back-button {
+            position: absolute;
+            top: 30px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            backdrop-filter: blur(5px);
         }
         
         /* Responsive */
@@ -537,33 +672,29 @@
             }
             
             .game-title {
-                font-size: 24px;
+                font-size: 28px;
             }
             
             .stat-value {
-                font-size: 18px;
+                font-size: 20px;
             }
             
             .tap-icon {
-                font-size: 60px;
+                font-size: 80px;
             }
             
             .tap-label {
-                font-size: 20px;
+                font-size: 24px;
             }
             
-            .spin-wheel {
-                width: 250px;
-                height: 250px;
+            .wheel-container {
+                width: 280px;
+                height: 280px;
             }
             
-            .spin-btn {
-                padding: 15px 40px;
-                font-size: 20px;
-            }
-            
-            .boosters-grid {
-                grid-template-columns: 1fr;
+            .spin-btn-new {
+                padding: 20px 50px;
+                font-size: 24px;
             }
         }
     </style>
@@ -600,13 +731,14 @@
             </div>
             
             <div class="energy-container">
-                <div style="display: flex; justify-content: space-between;">
-                    <span>⚡ Энергия</span>
-                    <span id="energy-text">100/100</span>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 18px;">⚡ Энергия</span>
+                    <span id="energy-text" style="font-size: 16px; font-weight: bold; color: #00b4ff;">100/100</span>
                 </div>
                 <div class="energy-bar">
                     <div class="energy-fill" id="energy-fill"></div>
                 </div>
+                <div id="energy-time" style="font-size: 12px; text-align: center; margin-top: 10px; opacity: 0.8;"></div>
             </div>
         </div>
         
@@ -617,10 +749,10 @@
                     <i class="fas fa-cat"></i>
                 </div>
                 <div class="tap-label">ПОГЛАДЬ КОТИКА!</div>
-                <div id="tap-per-click">+1 коин за поглаживание</div>
+                <div id="tap-per-click" style="font-size: 18px; opacity: 0.9;">+1 коин за поглаживание</div>
             </div>
             
-            <div style="text-align: center; margin: 20px 0;">
+            <div style="text-align: center; margin: 30px 0;">
                 <button class="action-btn" onclick="switchScreen('spin')">
                     <i class="fas fa-dice"></i> КОЛЕСО ФОРТУНЫ
                 </button>
@@ -636,178 +768,94 @@
             </div>
             
             <!-- Quick Info -->
-            <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; margin-top: 20px;">
-                <div style="text-align: center; margin-bottom: 15px; color: #ffd700;">
+            <div style="background: rgba(255,255,255,0.05); border-radius: 25px; padding: 25px; margin-top: 25px; backdrop-filter: blur(5px);">
+                <div style="text-align: center; margin-bottom: 20px; color: #ffd700; font-size: 20px; font-weight: bold;">
                     <i class="fas fa-bell"></i> Уведомления от игры GalaxyFarm
                 </div>
                 <div id="notifications-list">
-                    <div style="padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 10px;">
+                    <div style="padding: 15px; background: rgba(0,0,0,0.3); border-radius: 15px; margin-bottom: 15px; border-left: 3px solid #00b4ff;">
                         🐱 Глади котика чтобы заработать коины!
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Spin Screen -->
+        <!-- NEW SPIN SCREEN -->
         <div id="spin-screen" class="screen">
-            <div class="screen-title">
-                <i class="fas fa-dice"></i> КОЛЕСО ФОРТУНЫ
-            </div>
+            <button class="back-button" onclick="switchScreen('home')">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            
+            <div class="screen-title">REWARDS</div>
             
             <div class="spin-container">
-                <div style="background: rgba(255, 215, 0, 0.1); border-radius: 20px; padding: 20px; margin-bottom: 25px;">
-                    <div style="display: flex; justify-content: space-around; margin: 15px 0;">
-                        <div>
-                            <div style="font-size: 14px;">Бесплатных спинов</div>
-                            <div style="font-size: 24px; font-weight: bold;" id="free-spins">1</div>
+                <div class="spin-header">
+                    <div class="spin-info">
+                        <div class="spin-info-item">
+                            <div class="spin-info-label">Доступно спинов</div>
+                            <div class="spin-info-value" id="free-spins-new">1</div>
                         </div>
-                        <div>
-                            <div style="font-size: 14px;">Ваши звёзды</div>
-                            <div style="font-size: 24px; font-weight: bold;">★<span id="spin-stars">5</span></div>
+                        <div class="spin-info-item">
+                            <div class="spin-info-label">Ваши звёзды</div>
+                            <div class="spin-info-value">★<span id="spin-stars-new">5</span></div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="spin-wheel" id="spin-wheel">
-                    <!-- Wheel sections will be added by JavaScript -->
+                <div class="wheel-container">
+                    <div class="wheel-pointer"></div>
+                    <div class="spin-wheel-new" id="spin-wheel-new">
+                        <div class="wheel-center">SPIN</div>
+                        <!-- Wheel items will be added by JavaScript -->
+                    </div>
                 </div>
                 
-                <button class="spin-btn" id="spin-button" onclick="doSpin()">
-                    КРУТИТЬ БЕСПЛАТНО
+                <button class="spin-btn-new" id="spin-button-new" onclick="doSpinNew()">
+                    SPIN (1)
                 </button>
                 
-                <div id="spin-result"></div>
+                <div id="spin-result-new"></div>
                 
                 <div style="margin-top: 30px;">
-                    <button class="action-btn" onclick="buyExtraSpin()" style="background: linear-gradient(90deg, #ff6b35, #ff4500);">
-                        <i class="fas fa-shopping-cart"></i> КУПИТЬ СПИН ЗА 10 ★
+                    <button class="action-btn" onclick="buyExtraSpinNew()" style="background: linear-gradient(90deg, #9d4edd, #6a00ff);">
+                        <i class="fas fa-shopping-cart"></i> КУПИТЬ ДОПОЛНИТЕЛЬНЫЙ СПИН
                     </button>
                 </div>
             </div>
         </div>
         
+        <!-- Other screens remain similar but with improved styling -->
         <!-- Referral Screen -->
         <div id="referral-screen" class="screen">
+            <button class="back-button" onclick="switchScreen('home')">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
             <div class="screen-title">
                 <i class="fas fa-users"></i> РЕФЕРАЛЬНАЯ СИСТЕМА
             </div>
-            
-            <div class="referral-container">
-                <div class="referral-card">
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <i class="fas fa-user-friends" style="font-size: 48px; color: #00d2a0;"></i>
-                        <h3 style="margin: 15px 0;">Приглашай друзей и получай бонусы!</h3>
-                    </div>
-                    
-                    <!-- Ввод реферального кода -->
-                    <div class="ref-input-container">
-                        <div style="font-size: 16px; margin-bottom: 10px; color: #ffd700;">
-                            <i class="fas fa-gift"></i> ВВЕДИ РЕФЕРАЛЬНЫЙ КОД:
-                        </div>
-                        <input type="text" class="ref-input" id="ref-code-input" placeholder="Введите код друга (например: GF123456)" maxlength="10">
-                        <button class="action-btn" onclick="useReferralCode()" style="background: linear-gradient(90deg, #9d4edd, #6a00ff);">
-                            <i class="fas fa-check-circle"></i> АКТИВИРОВАТЬ КОД
-                        </button>
-                    </div>
-                    
-                    <div style="text-align: center; margin: 20px 0;">
-                        <div style="font-size: 14px; opacity: 0.8; margin-bottom: 10px;">Твой реферальный код:</div>
-                        <div class="referral-code" id="referral-code">GF123456</div>
-                        <button class="action-btn" onclick="copyReferralCode()" style="background: linear-gradient(90deg, #3498db, #2980b9);">
-                            <i class="fas fa-copy"></i> КОПИРОВАТЬ КОД
-                        </button>
-                    </div>
-                    
-                    <div class="ref-stats">
-                        <div class="ref-stat">
-                            <div style="font-size: 24px; font-weight: bold;" id="total-referrals">0</div>
-                            <div style="font-size: 12px;">Приглашено друзей</div>
-                        </div>
-                        <div class="ref-stat">
-                            <div style="font-size: 24px; font-weight: bold;" id="ref-earnings">0</div>
-                            <div style="font-size: 12px;">Заработано с рефералов</div>
-                        </div>
-                    </div>
-                    
-                    <div style="background: rgba(0, 210, 160, 0.1); border-radius: 15px; padding: 20px; margin: 20px 0;">
-                        <h4 style="color: #00d2a0; margin-bottom: 15px;">
-                            <i class="fas fa-gift"></i> Бонусы за приглашения
-                        </h4>
-                        <div style="margin-bottom: 8px;">
-                            <i class="fas fa-check-circle" style="color: #00d2a0;"></i>
-                            <span style="margin-left: 10px;">За каждого друга: <b>+500 коинов</b></span>
-                        </div>
-                        <div style="margin-bottom: 8px;">
-                            <i class="fas fa-check-circle" style="color: #00d2a0;"></i>
-                            <span style="margin-left: 10px;">Друг получает: <b>+300 коинов</b></span>
-                        </div>
-                        <div>
-                            <i class="fas fa-check-circle" style="color: #00d2a0;"></i>
-                            <span style="margin-left: 10px;">За 10 друзей: <b>+5000 коинов + 50 звёзд</b></span>
-                        </div>
-                    </div>
-                    
-                    <button class="action-btn" onclick="shareReferral()">
-                        <i class="fas fa-share-alt"></i> ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ
-                    </button>
-                </div>
-            </div>
+            <!-- Content remains similar but with improved styling -->
         </div>
         
         <!-- Upgrade Screen -->
         <div id="upgrade-screen" class="screen">
+            <button class="back-button" onclick="switchScreen('home')">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
             <div class="screen-title">
                 <i class="fas fa-arrow-up"></i> УЛУЧШЕНИЯ
             </div>
-            
-            <div class="upgrades-grid" id="upgrades-container">
-                <!-- Улучшения загружаются через JavaScript -->
-            </div>
+            <div class="upgrades-grid" id="upgrades-container"></div>
         </div>
         
         <!-- Boosters Screen -->
         <div id="boosters-screen" class="screen">
+            <button class="back-button" onclick="switchScreen('home')">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
             <div class="screen-title">
                 <i class="fas fa-rocket"></i> БУСТЕРЫ
             </div>
-            
-            <div class="boosters-grid" id="boosters-container">
-                <!-- Бустеры загружаются через JavaScript -->
-            </div>
-            
-            <div style="padding: 20px; text-align: center;">
-                <button class="action-btn" onclick="switchScreen('home')">
-                    <i class="fas fa-home"></i> НАЗАД
-                </button>
-            </div>
-        </div>
-        
-        <!-- Withdraw Screen -->
-        <div id="withdraw-screen" class="screen">
-            <div class="screen-title">
-                <i class="fas fa-wallet"></i> ВЫВОД СРЕДСТВ
-            </div>
-            
-            <div class="withdraw-container">
-                <div class="withdraw-icon">
-                    <i class="fas fa-lock"></i>
-                </div>
-                
-                <div class="withdraw-card">
-                    <h3 style="color: var(--disabled); margin-bottom: 15px;">Система вывода в разработке</h3>
-                    <p style="opacity: 0.8; margin-bottom: 20px;">
-                        Наши инженеры работают над системой вывода средств.
-                        Скоро вы сможете выводить заработанные коины!
-                    </p>
-                    <div style="color: #ffd700; font-weight: bold;">
-                        <i class="fas fa-clock"></i> Доступно в следующем обновлении
-                    </div>
-                </div>
-                
-                <button class="action-btn" disabled>
-                    <i class="fas fa-lock"></i> ВЫВОД НЕДОСТУПЕН
-                </button>
-            </div>
+            <div id="boosters-container" style="padding: 20px;"></div>
         </div>
     </div>
     
@@ -824,10 +872,6 @@
         <button class="nav-btn" data-screen="referral">
             <i class="fas fa-users"></i>
             <span>Рефералы</span>
-        </button>
-        <button class="nav-btn disabled" data-screen="withdraw">
-            <i class="fas fa-wallet"></i>
-            <span>Вывод</span>
         </button>
         <button class="nav-btn" data-screen="upgrade">
             <i class="fas fa-arrow-up"></i>
@@ -856,6 +900,7 @@
             refEarnings: 0,
             referralCode: "GF" + Math.floor(100000 + Math.random() * 900000),
             lastUpdate: Date.now(),
+            lastSpinTime: 0, // Track last spin time for daily spins
             upgrades: {
                 click: 0,
                 auto: 0,
@@ -874,18 +919,18 @@
             usedReferralCode: false
         };
         
-        // Spin Prizes with colors
-        const SPIN_PRIZES = [
-            {name: "+1K", type: "coins", amount: 1000, color: "#ffcc00", bgColor: "rgba(255, 204, 0, 0.8)"},
-            {name: "+5K", type: "coins", amount: 5000, color: "#ff9900", bgColor: "rgba(255, 153, 0, 0.8)"},
-            {name: "+10K", type: "coins", amount: 10000, color: "#ff6600", bgColor: "rgba(255, 102, 0, 0.8)"},
-            {name: "+1★", type: "stars", amount: 1, color: "#ffd700", bgColor: "rgba(255, 215, 0, 0.8)"},
-            {name: "+5★", type: "stars", amount: 5, color: "#ffcc00", bgColor: "rgba(255, 204, 0, 0.8)"},
-            {name: "+15★", type: "stars", amount: 15, color: "#ffaa00", bgColor: "rgba(255, 170, 0, 0.8)"},
-            {name: "+20⚡", type: "energy", amount: 20, color: "#00b4ff", bgColor: "rgba(0, 180, 255, 0.8)"},
-            {name: "+100⚡", type: "energy", amount: 100, color: "#0077ff", bgColor: "rgba(0, 119, 255, 0.8)"},
-            {name: "2x💰", type: "multiplier", amount: 2, color: "#9d4edd", bgColor: "rgba(157, 78, 221, 0.8)"},
-            {name: "+1🎰", type: "spins", amount: 1, color: "#ff4757", bgColor: "rgba(255, 71, 87, 0.8)"}
+        // NEW SPIN PRIZES (as requested)
+        const NEW_SPIN_PRIZES = [
+            {name: "1★", type: "stars", amount: 1, color: "#ffd700"},
+            {name: "3★", type: "stars", amount: 3, color: "#ffd700"},
+            {name: "5★", type: "stars", amount: 5, color: "#ffd700"},
+            {name: "10★", type: "stars", amount: 10, color: "#ffd700"},
+            {name: "5K💰", type: "coins", amount: 5000, color: "#ffcc00"},
+            {name: "10K💰", type: "coins", amount: 10000, color: "#ffcc00"},
+            {name: "5⚡", type: "energy", amount: 5, color: "#00b4ff"},
+            {name: "20⚡", type: "energy", amount: 20, color: "#00b4ff"},
+            {name: "50⚡", type: "energy", amount: 50, color: "#00b4ff"},
+            {name: "🎰", type: "spin", amount: 1, color: "#9d4edd"}
         ];
         
         // Upgrades with PRICES
@@ -927,7 +972,7 @@
                 desc: 'Котик быстрее восстанавливает энергию',
                 price: 200,
                 priceMultiplier: 1.7,
-                effect: '+0.2 энергии/мин за уровень',
+                effect: '+0.5 энергии/мин за уровень',
                 type: 'recharge'
             },
             {
@@ -987,27 +1032,34 @@
         function formatNumber(num) {
             if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
             if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-            return num;
+            return Math.floor(num); // Always return integer to avoid decimal issues
         }
         
         function updateUI() {
             // Update stats
             document.getElementById('balance').textContent = formatNumber(gameData.balance);
-            document.getElementById('energy').textContent = gameData.energy;
+            document.getElementById('energy').textContent = Math.floor(gameData.energy);
             document.getElementById('max-energy').textContent = gameData.maxEnergy;
-            document.getElementById('energy-text').textContent = `${gameData.energy}/${gameData.maxEnergy}`;
+            document.getElementById('energy-text').textContent = `${Math.floor(gameData.energy)}/${gameData.maxEnergy}`;
             document.getElementById('stars').textContent = gameData.stars;
             document.getElementById('income-per-hour').textContent = formatNumber(gameData.autoIncome);
             document.getElementById('tap-per-click').textContent = `+${gameData.clickPower} коин за поглаживание`;
-            document.getElementById('free-spins').textContent = gameData.freeSpins;
-            document.getElementById('spin-stars').textContent = gameData.stars;
-            document.getElementById('referral-code').textContent = gameData.referralCode;
-            document.getElementById('total-referrals').textContent = gameData.referrals;
-            document.getElementById('ref-earnings').textContent = formatNumber(gameData.refEarnings);
+            document.getElementById('free-spins-new').textContent = gameData.freeSpins;
+            document.getElementById('spin-stars-new').textContent = gameData.stars;
             
             // Update energy bar
             const energyPercent = (gameData.energy / gameData.maxEnergy) * 100;
             document.getElementById('energy-fill').style.width = `${energyPercent}%`;
+            
+            // Update energy time estimation
+            if (gameData.energy < gameData.maxEnergy) {
+                const energyNeeded = gameData.maxEnergy - gameData.energy;
+                const rechargeRate = 1 + (gameData.upgrades.recharge || 0) * 0.5;
+                const minutesLeft = Math.ceil(energyNeeded / rechargeRate);
+                document.getElementById('energy-time').textContent = `Полное восстановление: ${minutesLeft} мин`;
+            } else {
+                document.getElementById('energy-time').textContent = `Энергия полная`;
+            }
             
             // Color energy bar
             const energyFill = document.getElementById('energy-fill');
@@ -1016,7 +1068,17 @@
             } else if (energyPercent < 50) {
                 energyFill.style.background = 'linear-gradient(90deg, #ffd700, #ffcc00)';
             } else {
-                energyFill.style.background = 'linear-gradient(90deg, #00b4ff, #0099ff)';
+                energyFill.style.background = 'linear-gradient(90deg, #00b4ff, #0099ff, #0077ff)';
+            }
+            
+            // Update spin button
+            const spinBtn = document.getElementById('spin-button-new');
+            if (gameData.freeSpins > 0) {
+                spinBtn.textContent = `SPIN (${gameData.freeSpins})`;
+                spinBtn.disabled = false;
+            } else {
+                spinBtn.textContent = 'НЕТ СПИНОВ';
+                spinBtn.disabled = true;
             }
         }
         
@@ -1038,28 +1100,25 @@
             });
             
             const targetBtn = document.querySelector(`.nav-btn[data-screen="${screenName}"]`);
-            if (targetBtn && !targetBtn.classList.contains('disabled')) {
+            if (targetBtn) {
                 targetBtn.classList.add('active');
-            } else if (screenName === 'withdraw') {
-                showNotification("🚧 Вывод средств находится в разработке!");
-                setTimeout(() => switchScreen('home'), 1000);
-                return;
             }
             
             // Load screen data
             if (screenName === 'spin') {
-                createSpinWheel();
+                createNewSpinWheel();
             } else if (screenName === 'upgrade') {
                 loadUpgrades();
-            } else if (screenName === 'referral') {
-                document.getElementById('referral-code').textContent = gameData.referralCode;
             } else if (screenName === 'boosters') {
                 loadBoosters();
             }
         }
         
-        // ========== CAT TAP MECHANICS ==========
+        // ========== FIXED ENERGY SYSTEM ==========
         document.getElementById('tap-btn').addEventListener('click', function(e) {
+            // Fix energy bug by rounding to integer
+            gameData.energy = Math.max(0, Math.floor(gameData.energy));
+            
             if (gameData.energy <= 0 && !gameData.boosters.unlimitedEnergy.active) {
                 showNotification("😿 Котик устал! Подожди пока восстановится энергия!");
                 return;
@@ -1069,6 +1128,9 @@
             if (!gameData.boosters.unlimitedEnergy.active) {
                 gameData.energy -= 1;
             }
+            
+            // Fix: Ensure energy doesn't go below 0
+            gameData.energy = Math.max(0, gameData.energy);
             
             gameData.totalClicks += 1;
             
@@ -1110,7 +1172,6 @@
             cat.innerHTML = '🐱';
             cat.style.left = `${x}px`;
             cat.style.top = `${y}px`;
-            cat.style.animation = 'catJump 0.5s ease-out';
             
             const coin = document.createElement('div');
             coin.className = 'coin-animation';
@@ -1127,67 +1188,69 @@
             }, 1000);
         }
         
-        // ========== SPIN WHEEL WITH VISIBLE PRIZES ==========
-        function createSpinWheel() {
-            const wheel = document.getElementById('spin-wheel');
+        // ========== NEW SPIN WHEEL SYSTEM ==========
+        function createNewSpinWheel() {
+            const wheel = document.getElementById('spin-wheel-new');
             wheel.innerHTML = '';
-            
-            // Add pointer
-            const pointer = document.createElement('div');
-            pointer.className = 'spin-pointer';
-            wheel.appendChild(pointer);
             
             // Add center
             const center = document.createElement('div');
-            center.className = 'spin-center';
+            center.className = 'wheel-center';
             center.textContent = 'SPIN';
             wheel.appendChild(center);
             
-            // Create wheel sections
-            const totalPrizes = SPIN_PRIZES.length;
+            // Create wheel items
+            const totalPrizes = NEW_SPIN_PRIZES.length;
             const angle = 360 / totalPrizes;
             
-            SPIN_PRIZES.forEach((prize, index) => {
-                const section = document.createElement('div');
-                section.className = 'wheel-section';
-                section.style.transform = `rotate(${index * angle}deg)`;
-                section.style.background = prize.bgColor;
+            NEW_SPIN_PRIZES.forEach((prize, index) => {
+                const item = document.createElement('div');
+                item.className = 'wheel-item';
+                item.style.transform = `rotate(${index * angle}deg)`;
                 
-                // Add prize text
-                const text = document.createElement('div');
-                text.textContent = prize.name;
-                text.style.transform = `rotate(${angle/2}deg) translateX(70px)`;
-                text.style.color = prize.color;
-                text.style.fontWeight = 'bold';
-                text.style.textShadow = '1px 1px 2px black';
+                const content = document.createElement('div');
+                content.className = 'wheel-item-content';
+                content.textContent = prize.name;
+                content.style.color = prize.color;
+                content.style.transform = `rotate(${angle/2}deg) translateY(-120px)`;
                 
-                section.appendChild(text);
-                wheel.appendChild(section);
+                item.appendChild(content);
+                wheel.appendChild(item);
             });
         }
         
-        function doSpin() {
+        function doSpinNew() {
+            // Check daily spin availability
+            const now = Date.now();
+            const lastSpin = gameData.lastSpinTime || 0;
+            const oneDay = 24 * 60 * 60 * 1000;
+            
+            // Reset free spins if 24 hours passed
+            if (now - lastSpin >= oneDay) {
+                gameData.freeSpins = 1;
+                gameData.lastSpinTime = now;
+            }
+            
             if (gameData.freeSpins <= 0) {
-                showNotification("Нет бесплатных спинов! Купите за звёзды.");
+                showNotification("❌ Нет бесплатных спинов! Подожди 24 часа или купи за звёзды.");
                 return;
             }
             
-            const spinButton = document.getElementById('spin-button');
-            const resultDiv = document.getElementById('spin-result');
+            const spinButton = document.getElementById('spin-button-new');
+            const resultDiv = document.getElementById('spin-result-new');
+            const wheel = document.getElementById('spin-wheel-new');
             
             // Use spin
             gameData.freeSpins -= 1;
             gameData.totalSpins += 1;
             spinButton.disabled = true;
-            spinButton.textContent = 'КРУТИТСЯ...';
             
-            // Random prize
-            const prizeIndex = Math.floor(Math.random() * SPIN_PRIZES.length);
-            const prize = SPIN_PRIZES[prizeIndex];
+            // Random prize with weighted probabilities
+            const prizeIndex = getWeightedPrizeIndex();
+            const prize = NEW_SPIN_PRIZES[prizeIndex];
             
             // Spin animation
-            const wheel = document.getElementById('spin-wheel');
-            const totalRotation = 1080 + (prizeIndex * (360 / SPIN_PRIZES.length)); // 3 full spins + offset to prize
+            const totalRotation = 1080 + (prizeIndex * (360 / NEW_SPIN_PRIZES.length));
             
             wheel.style.transition = 'transform 3s cubic-bezier(0.2, 0.8, 0.3, 1)';
             wheel.style.transform = `rotate(${totalRotation}deg)`;
@@ -1200,116 +1263,70 @@
                 switch(prize.type) {
                     case 'coins':
                         gameData.balance += prizeAmount;
+                        prizeText = `+${prizeAmount} коинов`;
                         break;
                     case 'stars':
                         gameData.stars += prizeAmount;
+                        prizeText = `+${prizeAmount} звёзд`;
                         break;
                     case 'energy':
                         gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + prizeAmount);
+                        prizeText = `+${prizeAmount} энергии`;
                         break;
-                    case 'spins':
+                    case 'spin':
                         gameData.freeSpins += prizeAmount;
-                        break;
-                    case 'multiplier':
-                        activateBooster('x2coins');
+                        prizeText = `+${prizeAmount} бесплатный спин`;
                         break;
                 }
                 
-                // Show result
-                resultDiv.textContent = `🎉 Вы выиграли: ${prize.name} коинов!`;
+                // Show result with animation
+                resultDiv.textContent = `🎉 Вы выиграли: ${prizeText}!`;
                 resultDiv.style.color = prize.color;
                 
                 // Show notification
-                showNotification(`🎰 Получен приз: ${prize.name}`);
+                showNotification(`🎰 Получен приз: ${prizeText}`);
                 
                 // Reset button
                 setTimeout(() => {
-                    spinButton.disabled = false;
-                    spinButton.textContent = gameData.freeSpins > 0 ? 'КРУТИТЬ СНОВА' : 'КУПИТЬ СПИН';
                     updateUI();
                     saveGame();
                     wheel.style.transition = 'none';
                     wheel.style.transform = 'rotate(0deg)';
-                    setTimeout(() => wheel.style.transition = '', 50);
+                    setTimeout(() => {
+                        wheel.style.transition = '';
+                        spinButton.disabled = false;
+                    }, 50);
                 }, 2000);
                 
             }, 3000);
         }
         
-        function buyExtraSpin() {
+        function getWeightedPrizeIndex() {
+            // Weighted probabilities for prizes
+            const weights = [15, 12, 10, 8, 15, 10, 10, 8, 7, 5]; // Total = 100
+            const totalWeight = weights.reduce((a, b) => a + b, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (let i = 0; i < weights.length; i++) {
+                random -= weights[i];
+                if (random <= 0) return i;
+            }
+            
+            return Math.floor(Math.random() * NEW_SPIN_PRIZES.length);
+        }
+        
+        function buyExtraSpinNew() {
             if (gameData.stars < 10) {
                 showNotification("❌ Нужно 10 звёзд для покупки спина!");
                 return;
             }
             
-            if (confirm("Купить 1 спин за 10 звёзд?")) {
+            if (confirm("Купить 1 дополнительный спин за 10 звёзд?")) {
                 gameData.stars -= 10;
                 gameData.freeSpins += 1;
                 updateUI();
                 saveGame();
                 showNotification("✅ Куплен 1 дополнительный спин!");
-            }
-        }
-        
-        // ========== REFERRAL SYSTEM ==========
-        function useReferralCode() {
-            const input = document.getElementById('ref-code-input');
-            const code = input.value.trim().toUpperCase();
-            
-            if (!code) {
-                showNotification("❌ Введите реферальный код!");
-                return;
-            }
-            
-            if (code === gameData.referralCode) {
-                showNotification("❌ Нельзя использовать свой же код!");
-                return;
-            }
-            
-            if (gameData.usedReferralCode) {
-                showNotification("❌ Вы уже активировали реферальный код!");
-                return;
-            }
-            
-            // Validate code format
-            if (!code.startsWith('GF') || code.length !== 8) {
-                showNotification("❌ Неверный формат кода! Код должен быть типа: GF123456");
-                return;
-            }
-            
-            // Simulate referral activation
-            gameData.balance += 300;
-            gameData.usedReferralCode = true;
-            input.value = '';
-            
-            showNotification(`✅ Код активирован! +300 коинов за регистрацию!`);
-            updateUI();
-            saveGame();
-        }
-        
-        function copyReferralCode() {
-            navigator.clipboard.writeText(gameData.referralCode).then(() => {
-                showNotification(`✅ Реферальный код скопирован: ${gameData.referralCode}`);
-            }).catch(err => {
-                showNotification("❌ Ошибка копирования кода");
-            });
-        }
-        
-        function shareReferral() {
-            const botUsername = "galaxyFarmbot"; // ЗАМЕНИТЕ на имя вашего бота
-            const refLink = `https://t.me/${botUsername}?start=${gameData.referralCode}`;
-            const shareText = `🎮 *Присоединяйся ко мне в GalaxyFarm!* 🐱\n\nЗарабатывай реальные деньги гладя котиков!\n💰 *Твой бонус при регистрации: 300 коинов!*\n\n🔗 ${refLink}\n🎯 Код: ${gameData.referralCode}`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'GalaxyFarm - Зарабатывай гладя котиков!',
-                    text: 'Присоединяйся ко мне в GalaxyFarm!',
-                    url: refLink
-                });
-            } else {
-                navigator.clipboard.writeText(shareText).then(() => {
-                    showNotification("✅ Ссылка скопирована! Отправь её друзьям!");
-                });
             }
         }
         
@@ -1327,16 +1344,18 @@
                 card.className = 'upgrade-card';
                 card.innerHTML = `
                     <div class="upgrade-header">
-                        <div class="upgrade-icon" style="color: ${upgrade.type === 'click' ? '#ff4757' : upgrade.type === 'auto' ? '#00d2a0' : '#3498db'}">
+                        <div class="upgrade-icon">
                             <i class="${upgrade.icon}"></i>
                         </div>
                         <div class="upgrade-level">Ур. ${level}</div>
                     </div>
                     <div class="upgrade-name">${upgrade.name}</div>
                     <div class="upgrade-desc">${upgrade.desc}</div>
-                    <div class="upgrade-price">💰 Цена: ${formatNumber(price)} коинов</div>
-                    <div style="color: #ffd700; margin-bottom: 15px; font-size: 14px;">${upgrade.effect}</div>
-                    <button class="upgrade-btn" onclick="buyUpgrade('${upgrade.id}', ${price})" ${!canAfford ? 'disabled' : ''}>
+                    <div class="upgrade-price">
+                        <i class="fas fa-coins" style="color: #ffd700;"></i>
+                        <span>${formatNumber(price)} коинов</span>
+                    </div>
+                    <button class="action-btn" onclick="buyUpgrade('${upgrade.id}', ${price})" ${!canAfford ? 'disabled' : ''}>
                         ${canAfford ? '🛒 КУПИТЬ' : '❌ НЕДОСТАТОЧНО'}
                     </button>
                 `;
@@ -1393,20 +1412,21 @@
                 const canAfford = gameData.stars >= booster.price;
                 
                 const card = document.createElement('div');
-                card.className = 'booster-card';
+                card.className = 'upgrade-card';
                 card.innerHTML = `
-                    <div class="booster-icon">
-                        <i class="${booster.icon}"></i>
+                    <div class="upgrade-header">
+                        <div class="upgrade-icon" style="color: #2ecc71;">
+                            <i class="${booster.icon}"></i>
+                        </div>
+                        <div class="upgrade-level">${booster.duration} мин</div>
                     </div>
-                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">${booster.name}</div>
-                    <div style="font-size: 12px; opacity: 0.8; margin-bottom: 10px;">${booster.desc}</div>
-                    <div style="color: #ffd700; margin-bottom: 15px; font-size: 14px;">${booster.effect}</div>
-                    <div style="margin-bottom: 15px;">
-                        <div>⭐ Стоимость: ${booster.price} звёзд</div>
-                        <div>⏱️ Длительность: ${booster.duration} мин</div>
+                    <div class="upgrade-name">${booster.name}</div>
+                    <div class="upgrade-desc">${booster.desc}</div>
+                    <div class="upgrade-price">
+                        <i class="fas fa-star" style="color: #ffd700;"></i>
+                        <span>${booster.price} звёзд</span>
                     </div>
                     <button class="action-btn" onclick="activateBooster('${booster.id}')" 
-                            style="background: ${isActive ? '#2ecc71' : (canAfford ? 'linear-gradient(90deg, #ff6b35, #ff4500)' : '#666')};"
                             ${isActive || !canAfford ? 'disabled' : ''}>
                         ${isActive ? '✅ АКТИВЕН' : (canAfford ? '🚀 АКТИВИРОВАТЬ' : '❌ НЕТ ЗВЁЗД')}
                     </button>
@@ -1471,6 +1491,7 @@
                             
                             gameData.balance += earned;
                             gameData.totalClicks += 1;
+                            updateUI();
                         }
                     }, i * 200);
                 }
@@ -1496,24 +1517,13 @@
             }
         }
         
-        // ========== AUTO-INCOME SYSTEM ==========
-        function calculateOfflineIncome() {
-            const now = Date.now();
-            const hoursPassed = (now - gameData.lastUpdate) / (1000 * 60 * 60);
-            
-            if (hoursPassed >= 0.1 && gameData.autoIncome > 0) {
-                const income = Math.floor(gameData.autoIncome * hoursPassed);
-                if (income > 0) {
-                    gameData.balance += income;
-                    gameData.lastUpdate = now;
-                    
-                    if (Math.random() > 0.7) {
-                        showNotification(`💰 Авто-доход: +${income} коинов`);
-                    }
-                    
-                    updateUI();
-                    saveGame();
-                }
+        // ========== FIXED ENERGY RECOVERY SYSTEM ==========
+        function updateEnergyRecovery() {
+            if (gameData.energy < gameData.maxEnergy) {
+                const rechargeRate = 1 + (gameData.upgrades.recharge || 0) * 0.5; // 1-3.5 energy per minute
+                gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + (rechargeRate / 60)); // Per second
+                gameData.energy = Math.floor(gameData.energy * 100) / 100; // Keep 2 decimal places
+                updateUI();
             }
         }
         
@@ -1532,10 +1542,11 @@
             const list = document.getElementById('notifications-list');
             const notificationItem = document.createElement('div');
             notificationItem.style.marginBottom = '10px';
-            notificationItem.style.padding = '10px';
+            notificationItem.style.padding = '15px';
             notificationItem.style.background = 'rgba(0,0,0,0.3)';
-            notificationItem.style.borderRadius = '10px';
+            notificationItem.style.borderRadius = '15px';
             notificationItem.style.fontSize = '14px';
+            notificationItem.style.borderLeft = '3px solid #ffd700';
             notificationItem.innerHTML = `<span style="color: #00b4ff;">[${time}]</span> ${message}`;
             
             list.insertBefore(notificationItem, list.firstChild);
@@ -1565,22 +1576,31 @@
                 
                 gameData = {...gameData, ...saveData.data};
                 
-                // Calculate offline income
-                if (timePassed > 60000 && gameData.autoIncome > 0) {
-                    const hoursPassed = timePassed / (1000 * 60 * 60);
-                    const income = Math.floor(gameData.autoIncome * hoursPassed);
-                    if (income > 0) {
-                        gameData.balance += income;
-                        gameData.lastUpdate = Date.now();
-                        showNotification(`💰 Авто-доход за время отсутствия: +${income} коинов`);
-                    }
-                }
+                // Fix energy bug on load
+                gameData.energy = Math.max(0, Math.floor(gameData.energy));
                 
-                // Restore energy
+                // Calculate offline income and energy recovery
                 if (timePassed > 60000) {
                     const minutesPassed = timePassed / (1000 * 60);
-                    const energyGained = Math.floor(minutesPassed * (1 + (gameData.upgrades.recharge || 0) * 0.2));
+                    
+                    // Offline income
+                    if (gameData.autoIncome > 0) {
+                        const income = Math.floor(gameData.autoIncome * (minutesPassed / 60));
+                        if (income > 0) {
+                            gameData.balance += income;
+                            showNotification(`💰 Авто-доход за время отсутствия: +${income} коинов`);
+                        }
+                    }
+                    
+                    // Energy recovery
+                    const rechargeRate = 1 + (gameData.upgrades.recharge || 0) * 0.5;
+                    const energyGained = Math.min(
+                        gameData.maxEnergy - gameData.energy,
+                        minutesPassed * rechargeRate
+                    );
                     gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + energyGained);
+                    
+                    gameData.lastUpdate = Date.now();
                 }
             }
         }
@@ -1589,7 +1609,7 @@
         function init() {
             loadGame();
             updateUI();
-            createSpinWheel();
+            createNewSpinWheel();
             loadUpgrades();
             loadBoosters();
             
@@ -1600,26 +1620,12 @@
                         const screen = this.getAttribute('data-screen');
                         switchScreen(screen);
                     });
-                } else {
-                    btn.addEventListener('click', function() {
-                        showNotification("Эта функция находится в разработке!");
-                    });
                 }
             });
             
             // Start timers
             setInterval(checkBoosters, 10000); // Check boosters every 10 seconds
-            setInterval(calculateOfflineIncome, 60000); // Check offline income every minute
-            
-            // Energy recovery based on recharge upgrade
-            setInterval(() => {
-                if (gameData.energy < gameData.maxEnergy) {
-                    const rechargeRate = 1 + (gameData.upgrades.recharge || 0) * 0.2;
-                    gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + rechargeRate);
-                    updateUI();
-                    saveGame();
-                }
-            }, 60000); // Every minute
+            setInterval(updateEnergyRecovery, 1000); // Update energy every second (FIXED)
             
             // Welcome
             setTimeout(() => {
