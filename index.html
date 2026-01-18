@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- GalaxyFarm Web App - Complete Version with Referrals and Withdraw -->
+<!-- GalaxyFarm Web App - COMPLETE FIXED VERSION -->
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GalaxyFarm - Зарабатывай реальные деньги</title>
+    <title>GalaxyFarm - Зарабатывай AFK</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -396,6 +396,89 @@
             background: var(--disabled);
             cursor: not-allowed;
         }
+        
+        /* Upgrade Cards */
+        .upgrade-card {
+            background: rgba(26, 26, 74, 0.7);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(65, 105, 225, 0.3);
+        }
+        
+        /* Quest Cards */
+        .quest-card {
+            background: rgba(26, 26, 74, 0.7);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #00ff88;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .coin-animation {
+            position: fixed;
+            font-size: 24px;
+            color: #ffd700;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 10000;
+            animation: floatUp 1s ease-out forwards;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .game-title {
+                font-size: 24px;
+            }
+            
+            .stat-value {
+                font-size: 18px;
+            }
+            
+            .tap-icon {
+                font-size: 60px;
+            }
+            
+            .tap-label {
+                font-size: 20px;
+            }
+            
+            .spin-wheel {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .spin-btn {
+                padding: 15px 40px;
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -414,7 +497,7 @@
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-bolt"></i>
-                    <div class="stat-value"><span id="energy">100</span>/100</div>
+                    <div class="stat-value"><span id="energy">100</span>/<span id="max-energy">100</span></div>
                     <div class="stat-label">ЭНЕРГИЯ</div>
                 </div>
                 <div class="stat-card">
@@ -423,9 +506,9 @@
                     <div class="stat-label">ЗВЁЗДЫ</div>
                 </div>
                 <div class="stat-card">
-                    <i class="fas fa-users"></i>
-                    <div class="stat-value" id="referrals">0</div>
-                    <div class="stat-label">РЕФЕРАЛЫ</div>
+                    <i class="fas fa-clock"></i>
+                    <div class="stat-value" id="income-per-hour">0</div>
+                    <div class="stat-label">АВТО-ДОХОД</div>
                 </div>
             </div>
             
@@ -436,6 +519,9 @@
                 </div>
                 <div class="energy-bar">
                     <div class="energy-fill" id="energy-fill"></div>
+                </div>
+                <div style="text-align: center; font-size: 12px; opacity: 0.7; margin-top: 10px;">
+                    ⏳ Авто-доход работает даже оффлайн!
                 </div>
             </div>
         </div>
@@ -457,6 +543,9 @@
                 <button class="action-btn" onclick="switchScreen('referral')" style="background: linear-gradient(90deg, #00d2a0, #00b894);">
                     <i class="fas fa-users"></i> ПРИГЛАСИТЬ ДРУЗЕЙ
                 </button>
+                <button class="action-btn" onclick="switchScreen('upgrade')" style="background: linear-gradient(90deg, #ffd700, #ffcc00);">
+                    <i class="fas fa-arrow-up"></i> УЛУЧШЕНИЯ
+                </button>
             </div>
             
             <!-- Quick Info -->
@@ -466,7 +555,7 @@
                 </div>
                 <div id="notifications-list">
                     <div style="padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; margin-bottom: 10px;">
-                        Добро пожаловать в GalaxyFarm! 🚀
+                        🚀 Добро пожаловать в GalaxyFarm!
                     </div>
                 </div>
             </div>
@@ -490,10 +579,14 @@
                             <div style="font-size: 24px; font-weight: bold;">★<span id="spin-stars">5</span></div>
                         </div>
                     </div>
+                    <div style="margin-top: 15px; font-size: 14px; opacity: 0.8;">
+                        <i class="fas fa-info-circle"></i> 1 бесплатный спин ежедневно
+                    </div>
                 </div>
                 
                 <div class="spin-wheel" id="spin-wheel">
                     <div class="spin-pointer"></div>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: #0a0a2a; border-radius: 50%; border: 5px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #ffd700;">SPIN</div>
                 </div>
                 
                 <button class="spin-btn" id="spin-button" onclick="doSpin()">
@@ -510,6 +603,12 @@
                     <div class="prizes-list" id="prizes-list">
                         <!-- Призы загружаются через JS -->
                     </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <button class="action-btn" onclick="buyExtraSpin()" style="background: linear-gradient(90deg, #ff6b35, #ff4500);">
+                        <i class="fas fa-shopping-cart"></i> КУПИТЬ СПИН ЗА 10 ★
+                    </button>
                 </div>
             </div>
         </div>
@@ -529,7 +628,7 @@
                     
                     <div style="text-align: center; margin: 20px 0;">
                         <div style="font-size: 14px; opacity: 0.8; margin-bottom: 10px;">Ваш реферальный код:</div>
-                        <div class="referral-code" id="referral-code">GF123456</div>
+                        <div class="referral-code" id="referral-code">Загрузка...</div>
                         <button class="action-btn" onclick="copyReferralCode()" style="background: linear-gradient(90deg, #3498db, #2980b9);">
                             <i class="fas fa-copy"></i> КОПИРОВАТЬ КОД
                         </button>
@@ -560,13 +659,21 @@
                         </div>
                         <div>
                             <i class="fas fa-check-circle" style="color: #00d2a0;"></i>
-                            <span style="margin-left: 10px;">За 10 друзей: <b>+5000 коинов + 50 звёзд</b></span>
+                            <span style="margin-left: 10px;">За 5 друзей: <b>+3000 коинов</b></span>
+                        </div>
+                        <div>
+                            <i class="fas fa-check-circle" style="color: #00d2a0;"></i>
+                            <span style="margin-left: 10px;">За 10 друзей: <b>+10000 коинов</b></span>
                         </div>
                     </div>
                     
                     <button class="action-btn" onclick="shareReferral()">
                         <i class="fas fa-share-alt"></i> ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ
                     </button>
+                    
+                    <div style="margin-top: 20px; font-size: 12px; opacity: 0.7; text-align: center;">
+                        🔗 Реферальная ссылка работает только в Telegram боте
+                    </div>
                 </div>
             </div>
         </div>
@@ -595,19 +702,19 @@
                 
                 <div class="withdraw-info">
                     <h4 style="color: #ffd700; margin-bottom: 15px;">
-                        <i class="fas fa-info-circle"></i> Информация о выводе
+                        <i class="fas fa-info-circle"></i> Требования для вывода
                     </h4>
                     <div style="margin-bottom: 10px;">
                         <i class="fas fa-coins" style="color: #ffcc00;"></i>
-                        <span style="margin-left: 10px;">Минимальная сумма вывода: <b>10,000 коинов</b></span>
+                        <span style="margin-left: 10px;">Минимум: <b>5,000 коинов</b></span>
                     </div>
                     <div style="margin-bottom: 10px;">
                         <i class="fas fa-star" style="color: #ffd700;"></i>
-                        <span style="margin-left: 10px;">Требуется звёзд для вывода: <b>50</b></span>
+                        <span style="margin-left: 10px;">Необходимо: <b>10 звёзд</b></span>
                     </div>
                     <div>
-                        <i class="fas fa-clock" style="color: #00b4ff;"></i>
-                        <span style="margin-left: 10px;">Время обработки: <b>до 24 часов</b></span>
+                        <i class="fas fa-check-circle" style="color: #00d2a0;"></i>
+                        <span style="margin-left: 10px;">Подписка на канал: <b>обязательна</b></span>
                     </div>
                 </div>
                 
@@ -619,7 +726,7 @@
                     <i class="fas fa-credit-card" style="font-size: 24px; color: var(--disabled);"></i>
                     <div>
                         <div style="font-weight: bold;">Банковская карта</div>
-                        <div style="font-size: 12px; opacity: 0.8;">Visa, Mastercard, Мир</div>
+                        <div style="font-size: 12px; opacity: 0.8;">Visa, Mastercard, МИР</div>
                     </div>
                 </div>
                 
@@ -627,7 +734,7 @@
                     <i class="fas fa-mobile-alt" style="font-size: 24px; color: var(--disabled);"></i>
                     <div>
                         <div style="font-weight: bold;">Электронные кошельки</div>
-                        <div style="font-size: 12px; opacity: 0.8;">ЮMoney, Qiwi, WebMoney</div>
+                        <div style="font-size: 12px; opacity: 0.8;">ЮMoney, Qiwi</div>
                     </div>
                 </div>
                 
@@ -635,7 +742,7 @@
                     <i class="fab fa-bitcoin" style="font-size: 24px; color: var(--disabled);"></i>
                     <div>
                         <div style="font-weight: bold;">Криптовалюта</div>
-                        <div style="font-size: 12px; opacity: 0.8;">Bitcoin, USDT, Ethereum</div>
+                        <div style="font-size: 12px; opacity: 0.8;">USDT, Bitcoin</div>
                     </div>
                 </div>
                 
@@ -687,44 +794,51 @@
     </div>
     
     <script>
-        // Game Data
+        // ========== GALAXYFARM GAME DATA ==========
         let gameData = {
             balance: 1000,
             energy: 100,
             maxEnergy: 100,
             stars: 5,
             clickPower: 1,
+            autoIncome: 0,
             freeSpins: 1,
             totalClicks: 0,
             totalSpins: 0,
             referrals: 0,
             refEarnings: 0,
-            referralCode: "GF" + Math.floor(Math.random() * 1000000),
-            level: 1,
-            income: 0,
+            referralCode: "GF" + Math.floor(100000 + Math.random() * 900000),
+            lastUpdate: Date.now(),
             upgrades: {
                 click: 0,
-                energy: 0,
-                recharge: 0
+                auto: 0,
+                energy: 0
             }
         };
         
         // Spin Prizes
         const SPIN_PRIZES = [
-            {name: "+1K коинов", type: "coins", amount: 1000, color: "#ffcc00"},
-            {name: "+5K коинов", type: "coins", amount: 5000, color: "#ff9900"},
-            {name: "+10K коинов", type: "coins", amount: 10000, color: "#ff6600"},
-            {name: "+1 звезда", type: "stars", amount: 1, color: "#ffd700"},
-            {name: "+5 звёзд", type: "stars", amount: 5, color: "#ffcc00"},
-            {name: "+15 звёзд", type: "stars", amount: 15, color: "#ffaa00"},
-            {name: "+20 энергии", type: "energy", amount: 20, color: "#00b4ff"},
-            {name: "+50 энергии", type: "energy", amount: 50, color: "#0099ff"},
-            {name: "+100 энергии", type: "energy", amount: 100, color: "#0077ff"},
-            {name: "2x множитель", type: "multiplier", amount: 2, color: "#9d4edd"},
-            {name: "+1 спин", type: "spins", amount: 1, color: "#ff4757"}
+            {name: "+1K коинов", type: "coins", amount: 1000, color: "#ffcc00", weight: 20},
+            {name: "+5K коинов", type: "coins", amount: 5000, color: "#ff9900", weight: 8},
+            {name: "+10K коинов", type: "coins", amount: 10000, color: "#ff6600", weight: 5},
+            {name: "+1 звезда", type: "stars", amount: 1, color: "#ffd700", weight: 20},
+            {name: "+5 звёзд", type: "stars", amount: 5, color: "#ffcc00", weight: 10},
+            {name: "+15 звёзд", type: "stars", amount: 15, color: "#ffaa00", weight: 5},
+            {name: "+20 энергии", type: "energy", amount: 20, color: "#00b4ff", weight: 15},
+            {name: "+50 энергии", type: "energy", amount: 50, color: "#0099ff", weight: 8},
+            {name: "+100 энергии", type: "energy", amount: 100, color: "#0077ff", weight: 5},
+            {name: "2x множитель", type: "multiplier", amount: 2, color: "#9d4edd", weight: 2},
+            {name: "+1 спин", type: "spins", amount: 1, color: "#ff4757", weight: 2}
         ];
         
-        // Utility Functions
+        // НИЗКИЕ ЦЕНЫ НА УЛУЧШЕНИЯ (как вы просили)
+        const UPGRADE_PRICES = {
+            click: { base: 100, increase: 1.5 },
+            auto: { base: 250, increase: 1.8 },
+            energy: { base: 150, increase: 1.6 }
+        };
+        
+        // ========== UTILITY FUNCTIONS ==========
         function formatNumber(num) {
             if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
             if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
@@ -735,9 +849,10 @@
             // Update stats
             document.getElementById('balance').textContent = formatNumber(gameData.balance);
             document.getElementById('energy').textContent = gameData.energy;
+            document.getElementById('max-energy').textContent = gameData.maxEnergy;
             document.getElementById('energy-text').textContent = `${gameData.energy}/${gameData.maxEnergy}`;
             document.getElementById('stars').textContent = gameData.stars;
-            document.getElementById('referrals').textContent = gameData.referrals;
+            document.getElementById('income-per-hour').textContent = formatNumber(gameData.autoIncome);
             document.getElementById('tap-per-click').textContent = `+${gameData.clickPower} коин за клик`;
             document.getElementById('free-spins').textContent = gameData.freeSpins;
             document.getElementById('spin-stars').textContent = gameData.stars;
@@ -748,6 +863,16 @@
             // Update energy bar
             const energyPercent = (gameData.energy / gameData.maxEnergy) * 100;
             document.getElementById('energy-fill').style.width = `${energyPercent}%`;
+            
+            // Color energy bar
+            const energyFill = document.getElementById('energy-fill');
+            if (energyPercent < 20) {
+                energyFill.style.background = 'linear-gradient(90deg, #ff4757, #ff6b81)';
+            } else if (energyPercent < 50) {
+                energyFill.style.background = 'linear-gradient(90deg, #ffd700, #ffcc00)';
+            } else {
+                energyFill.style.background = 'linear-gradient(90deg, #00b4ff, #0099ff)';
+            }
         }
         
         function switchScreen(screenName) {
@@ -771,9 +896,8 @@
             if (targetBtn && !targetBtn.classList.contains('disabled')) {
                 targetBtn.classList.add('active');
             } else if (screenName === 'withdraw') {
-                // Для вывода показываем сообщение
-                alert("🚧 Система вывода находится в разработке!\nСледите за обновлениями.");
-                switchScreen('home');
+                showNotification("🚧 Вывод средств находится в разработке!");
+                setTimeout(() => switchScreen('home'), 1000);
                 return;
             }
             
@@ -782,10 +906,12 @@
                 loadPrizes();
             } else if (screenName === 'upgrade') {
                 loadUpgrades();
+            } else if (screenName === 'referral') {
+                document.getElementById('referral-code').textContent = gameData.referralCode;
             }
         }
         
-        // Tap Mechanics
+        // ========== TAP MECHANICS ==========
         document.getElementById('tap-btn').addEventListener('click', function() {
             if (gameData.energy <= 0) {
                 showNotification("Недостаточно энергии!");
@@ -800,12 +926,12 @@
             const earned = gameData.clickPower;
             gameData.balance += earned;
             
+            // Create animation
+            createCoinAnimation(earned);
+            
             // Update UI
             updateUI();
             saveGame();
-            
-            // Show animation
-            createCoinAnimation(earned);
         });
         
         function createCoinAnimation(amount) {
@@ -815,33 +941,41 @@
             const y = rect.top + rect.height / 2;
             
             const coin = document.createElement('div');
-            coin.style.position = 'fixed';
-            coin.style.left = x + 'px';
-            coin.style.top = y + 'px';
-            coin.style.color = '#ffcc00';
-            coin.style.fontWeight = 'bold';
-            coin.style.fontSize = '24px';
-            coin.style.pointerEvents = 'none';
-            coin.style.zIndex = '1000';
+            coin.className = 'coin-animation';
             coin.textContent = `+${amount}`;
+            coin.style.left = `${x}px`;
+            coin.style.top = `${y}px`;
             
             document.body.appendChild(coin);
             
-            // Animation
-            let pos = y;
-            const interval = setInterval(() => {
-                pos -= 2;
-                coin.style.top = pos + 'px';
-                coin.style.opacity = (pos - y + 100) / 100;
-                
-                if (pos < y - 100) {
-                    clearInterval(interval);
-                    coin.remove();
-                }
-            }, 20);
+            setTimeout(() => {
+                coin.remove();
+            }, 1000);
         }
         
-        // Spin Wheel
+        // ========== AUTO-INCOME SYSTEM ==========
+        function calculateOfflineIncome() {
+            const now = Date.now();
+            const hoursPassed = (now - gameData.lastUpdate) / (1000 * 60 * 60);
+            
+            if (hoursPassed >= 0.1 && gameData.autoIncome > 0) { // Every 6 minutes
+                const income = Math.floor(gameData.autoIncome * hoursPassed);
+                if (income > 0) {
+                    gameData.balance += income;
+                    gameData.lastUpdate = now;
+                    
+                    // Show notification occasionally
+                    if (Math.random() > 0.7) {
+                        showNotification(`💰 Авто-доход: +${income} коинов`);
+                    }
+                    
+                    updateUI();
+                    saveGame();
+                }
+            }
+        }
+        
+        // ========== SPIN WHEEL SYSTEM ==========
         function loadPrizes() {
             const container = document.getElementById('prizes-list');
             container.innerHTML = '';
@@ -858,8 +992,8 @@
                 
                 item.style.borderColor = prize.color;
                 item.innerHTML = `
-                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">${prize.name}</div>
-                    <div style="font-size: 12px; opacity: 0.8;">Шанс: ${prize.type === 'coins' ? 'высокий' : prize.type === 'stars' ? 'средний' : 'низкий'}</div>
+                    <div style="font-size: 14px; font-weight: bold; margin-bottom: 5px;">${prize.name}</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Шанс: ${prize.weight}%</div>
                 `;
                 
                 container.appendChild(item);
@@ -868,7 +1002,7 @@
         
         function doSpin() {
             if (gameData.freeSpins <= 0) {
-                showNotification("Нет бесплатных спинов!");
+                showNotification("Нет бесплатных спинов! Купите за звёзды.");
                 return;
             }
             
@@ -882,6 +1016,9 @@
             spinButton.disabled = true;
             spinButton.textContent = 'КРУТИТСЯ...';
             
+            // Calculate total weight
+            const totalWeight = SPIN_PRIZES.reduce((sum, prize) => sum + prize.weight, 0);
+            
             // Spin animation
             let rotation = 0;
             const spinInterval = setInterval(() => {
@@ -893,36 +1030,46 @@
             setTimeout(() => {
                 clearInterval(spinInterval);
                 
-                // Get random prize
-                const prizeIndex = Math.floor(Math.random() * SPIN_PRIZES.length);
-                const prize = SPIN_PRIZES[prizeIndex];
+                // Get random prize with weighted chance
+                let random = Math.random() * totalWeight;
+                let selectedPrize = SPIN_PRIZES[0];
+                
+                for (const prize of SPIN_PRIZES) {
+                    random -= prize.weight;
+                    if (random <= 0) {
+                        selectedPrize = prize;
+                        break;
+                    }
+                }
                 
                 // Apply prize
-                switch(prize.type) {
+                let prizeAmount = selectedPrize.amount;
+                let prizeText = selectedPrize.name;
+                
+                switch(selectedPrize.type) {
                     case 'coins':
-                        gameData.balance += prize.amount;
+                        gameData.balance += prizeAmount;
                         break;
                     case 'stars':
-                        gameData.stars += prize.amount;
+                        gameData.stars += prizeAmount;
                         break;
                     case 'energy':
-                        gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + prize.amount);
+                        gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + prizeAmount);
                         break;
                     case 'spins':
-                        gameData.freeSpins += prize.amount;
+                        gameData.freeSpins += prizeAmount;
                         break;
                     case 'multiplier':
-                        // Apply 2x multiplier for next 10 clicks
-                        showNotification("Активирован 2x множитель на 10 кликов!");
+                        showNotification("🎯 Активирован 2x множитель на 10 кликов!");
                         break;
                 }
                 
                 // Show result
-                resultDiv.textContent = `🎉 Вы выиграли: ${prize.name}!`;
-                resultDiv.style.color = prize.color;
+                resultDiv.textContent = `🎉 Вы выиграли: ${prizeText}!`;
+                resultDiv.style.color = selectedPrize.color;
                 
                 // Show notification
-                showNotification(`🎰 Получен приз: ${prize.name}`);
+                showNotification(`🎰 Получен приз: ${prizeText}`);
                 
                 // Reset button
                 setTimeout(() => {
@@ -935,33 +1082,60 @@
             }, 3000);
         }
         
-        // Referral System
+        function buyExtraSpin() {
+            if (gameData.stars < 10) {
+                showNotification("❌ Нужно 10 звёзд для покупки спина!");
+                return;
+            }
+            
+            if (confirm("Купить 1 спин за 10 звёзд?")) {
+                gameData.stars -= 10;
+                gameData.freeSpins += 1;
+                updateUI();
+                saveGame();
+                showNotification("✅ Куплен 1 дополнительный спин!");
+            }
+        }
+        
+        // ========== REFERRAL SYSTEM ==========
         function copyReferralCode() {
             navigator.clipboard.writeText(gameData.referralCode).then(() => {
-                showNotification("✅ Реферальный код скопирован!");
+                showNotification(`✅ Реферальный код скопирован: ${gameData.referralCode}`);
             }).catch(err => {
-                showNotification("❌ Ошибка копирования");
+                showNotification("❌ Ошибка копирования кода");
             });
         }
         
         function shareReferral() {
-            const refLink = `https://t.me/galaxyFarmbot?start=${gameData.referralCode}`;
-            const shareText = `Присоединяйся к GalaxyFarm! 🚀\nЗарабатывай реальные деньги вместе со мной!\nТвой бонус при регистрации: 300 коинов!\n${refLink}`;
+            const botUsername = "galaxyFarmbot"; // Замените на имя вашего бота
+            const refLink = `https://t.me/${botUsername}?start=${gameData.referralCode}`;
+            const shareText = `🎮 *Присоединяйся ко мне в GalaxyFarm!* 🚀\n\nЗарабатывай реальные деньги вместе со мной!\n💰 *Твой бонус при регистрации: 300 коинов!*\n\n🔗 Ссылка: ${refLink}\n🎯 Код: ${gameData.referralCode}`;
             
+            // Try Web Share API first
             if (navigator.share) {
                 navigator.share({
                     title: 'GalaxyFarm - Зарабатывай деньги!',
-                    text: 'Присоединяйся к GalaxyFarm!',
+                    text: 'Присоединяйся ко мне в GalaxyFarm!',
                     url: refLink
+                }).then(() => {
+                    showNotification("✅ Поделились ссылкой!");
+                }).catch(err => {
+                    // Fallback to clipboard
+                    copyReferralToClipboard(shareText);
                 });
             } else {
-                navigator.clipboard.writeText(shareText).then(() => {
-                    showNotification("✅ Ссылка скопирована! Отправь её друзьям!");
-                });
+                // Fallback to clipboard
+                copyReferralToClipboard(shareText);
             }
         }
         
-        function addReferral() {
+        function copyReferralToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification("✅ Реферальная ссылка скопирована! Отправь её друзьям в Telegram!");
+            });
+        }
+        
+        function simulateReferral() {
             gameData.referrals += 1;
             gameData.refEarnings += 500;
             gameData.balance += 500;
@@ -970,65 +1144,72 @@
             saveGame();
         }
         
-        // Upgrades System
+        // ========== UPGRADES SYSTEM ==========
         function loadUpgrades() {
-            const upgrades = [
-                {
-                    id: 'click',
-                    name: 'Сила клика',
-                    desc: 'Увеличивает доход за клик',
-                    baseCost: 500,
-                    level: gameData.upgrades.click,
-                    effect: '+1 коин за уровень'
-                },
-                {
-                    id: 'energy',
-                    name: 'Макс. энергия',
-                    desc: 'Увеличивает максимальную энергию',
-                    baseCost: 1000,
-                    level: gameData.upgrades.energy,
-                    effect: '+10 энергии за уровень'
-                },
-                {
-                    id: 'recharge',
-                    name: 'Восстановление',
-                    desc: 'Ускоряет восстановление энергии',
-                    baseCost: 1500,
-                    level: gameData.upgrades.recharge,
-                    effect: '+0.2/мин за уровень'
-                }
-            ];
-            
             const container = document.getElementById('upgrades-container');
             container.innerHTML = '';
             
+            const upgrades = [
+                {
+                    id: 'click',
+                    name: '💪 Сила клика',
+                    desc: 'Больше коинов за каждый клик',
+                    currentLevel: gameData.upgrades.click,
+                    currentEffect: gameData.clickPower,
+                    effect: `+1 коин за уровень`,
+                    basePrice: UPGRADE_PRICES.click.base,
+                    increase: UPGRADE_PRICES.click.increase
+                },
+                {
+                    id: 'auto',
+                    name: '⏳ Авто-доход',
+                    desc: 'Зарабатывай коины даже когда оффлайн',
+                    currentLevel: gameData.upgrades.auto,
+                    currentEffect: gameData.autoIncome,
+                    effect: `+10 коинов/час за уровень`,
+                    basePrice: UPGRADE_PRICES.auto.base,
+                    increase: UPGRADE_PRICES.auto.increase
+                },
+                {
+                    id: 'energy',
+                    name: '🔋 Макс. энергия',
+                    desc: 'Увеличивает максимальную энергию',
+                    currentLevel: gameData.upgrades.energy,
+                    currentEffect: gameData.maxEnergy,
+                    effect: `+20 энергии за уровень`,
+                    basePrice: UPGRADE_PRICES.energy.base,
+                    increase: UPGRADE_PRICES.energy.increase
+                }
+            ];
+            
             upgrades.forEach(upgrade => {
-                const cost = upgrade.baseCost * (upgrade.level + 1);
-                const canAfford = gameData.balance >= cost;
+                const price = Math.floor(upgrade.basePrice * Math.pow(upgrade.increase, upgrade.currentLevel));
+                const canAfford = gameData.balance >= price;
                 
                 const card = document.createElement('div');
                 card.className = 'upgrade-card';
                 card.innerHTML = `
-                    <div style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 20px; margin-bottom: 15px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                            <div style="font-size: 18px; font-weight: bold;">${upgrade.name}</div>
-                            <div style="background: #9d4edd; color: white; padding: 5px 15px; border-radius: 15px;">
-                                Ур. ${upgrade.level}
-                            </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <div style="font-size: 20px;">${upgrade.name}</div>
+                        <div style="background: #9d4edd; color: white; padding: 5px 15px; border-radius: 15px; font-size: 12px;">
+                            Ур. ${upgrade.currentLevel}
                         </div>
-                        <div style="margin-bottom: 15px; opacity: 0.8;">${upgrade.desc}</div>
-                        <div style="color: #ffd700; margin-bottom: 15px;">${upgrade.effect}</div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div style="font-size: 16px; font-weight: bold; color: #ffcc00;">
-                                ${formatNumber(cost)} коинов
-                            </div>
-                            <button onclick="buyUpgrade('${upgrade.id}', ${cost})" 
-                                    style="background: ${canAfford ? 'linear-gradient(90deg, #9d4edd, #6a00ff)' : '#666'}; 
-                                           color: white; border: none; padding: 10px 20px; border-radius: 10px;
-                                           cursor: ${canAfford ? 'pointer' : 'not-allowed'}">
-                                ${canAfford ? 'КУПИТЬ' : 'НЕДОСТАТОЧНО'}
-                            </button>
+                    </div>
+                    <div style="margin-bottom: 10px; opacity: 0.8; font-size: 14px;">${upgrade.desc}</div>
+                    <div style="color: #ffd700; margin-bottom: 10px; font-size: 13px;">
+                        ${upgrade.effect} | Сейчас: ${upgrade.currentEffect}
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="font-size: 18px; font-weight: bold; color: ${canAfford ? '#ffcc00' : '#ff4757'};">
+                            ${price} коинов
                         </div>
+                        <button onclick="buyUpgrade('${upgrade.id}', ${price})" 
+                                style="background: ${canAfford ? 'linear-gradient(90deg, #00d2a0, #00b894)' : '#666'}; 
+                                       color: white; border: none; padding: 10px 20px; border-radius: 10px;
+                                       font-weight: bold; cursor: ${canAfford ? 'pointer' : 'not-allowed'};
+                                       font-size: 14px;">
+                            ${canAfford ? 'КУПИТЬ' : 'НЕТ ДЕНЕГ'}
+                        </button>
                     </div>
                 `;
                 
@@ -1036,32 +1217,37 @@
             });
         }
         
-        function buyUpgrade(type, cost) {
-            if (gameData.balance < cost) {
-                showNotification("Недостаточно коинов!");
+        function buyUpgrade(type, price) {
+            if (gameData.balance < price) {
+                showNotification(`❌ Не хватает ${price - gameData.balance} коинов!`);
                 return;
             }
             
-            gameData.balance -= cost;
+            gameData.balance -= price;
             gameData.upgrades[type] += 1;
             
             // Apply upgrade
             switch(type) {
                 case 'click':
                     gameData.clickPower += 1;
+                    showNotification(`✅ Сила клика повышена до ${gameData.clickPower}!`);
+                    break;
+                case 'auto':
+                    gameData.autoIncome += 10;
+                    showNotification(`✅ Авто-доход увеличен до ${gameData.autoIncome} коинов/час!`);
                     break;
                 case 'energy':
-                    gameData.maxEnergy += 10;
+                    gameData.maxEnergy += 20;
+                    showNotification(`✅ Макс. энергия увеличена до ${gameData.maxEnergy}!`);
                     break;
             }
             
             updateUI();
             loadUpgrades();
-            showNotification(`✅ Улучшение "${type}" куплено!`);
             saveGame();
         }
         
-        // Notification System
+        // ========== NOTIFICATION SYSTEM ==========
         function showNotification(message) {
             const notification = document.getElementById('notification');
             const text = document.getElementById('notification-text');
@@ -1096,7 +1282,7 @@
             }, 3000);
         }
         
-        // Save/Load Game
+        // ========== SAVE/LOAD GAME ==========
         function saveGame() {
             localStorage.setItem('galaxyfarm_save', JSON.stringify({
                 data: gameData,
@@ -1112,27 +1298,41 @@
                 
                 gameData = {...gameData, ...saveData.data};
                 
-                // Recover energy based on time passed
+                // Calculate offline income
+                if (timePassed > 60000 && gameData.autoIncome > 0) {
+                    const hoursPassed = timePassed / (1000 * 60 * 60);
+                    const income = Math.floor(gameData.autoIncome * hoursPassed);
+                    if (income > 0) {
+                        gameData.balance += income;
+                        gameData.lastUpdate = Date.now();
+                        showNotification(`💰 Авто-доход за время отсутствия: +${income} коинов`);
+                    }
+                }
+                
+                // Restore energy over time
                 if (timePassed > 60000) {
-                    const minutesPassed = timePassed / 60000;
-                    const energyGained = Math.floor(minutesPassed);
+                    const minutesPassed = timePassed / (1000 * 60);
+                    const energyGained = Math.floor(minutesPassed / 2); // 1 энергия каждые 2 минуты
                     gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + energyGained);
                 }
             }
         }
         
-        // Energy Recovery
+        // ========== ENERGY RECOVERY ==========
         function recoverEnergy() {
             if (gameData.energy < gameData.maxEnergy) {
-                gameData.energy += 1;
+                gameData.energy = Math.min(gameData.maxEnergy, gameData.energy + 1);
                 updateUI();
                 saveGame();
             }
         }
         
-        // Initialize
+        // ========== INITIALIZATION ==========
         function init() {
+            // Load saved game
             loadGame();
+            
+            // Update UI
             updateUI();
             loadPrizes();
             loadUpgrades();
@@ -1151,10 +1351,11 @@
                 }
             });
             
-            // Energy recovery every minute
-            setInterval(recoverEnergy, 60000);
+            // Start timers
+            setInterval(recoverEnergy, 120000); // Energy recovery every 2 minutes
+            setInterval(calculateOfflineIncome, 60000); // Check offline income every minute
             
-            // Show welcome notification
+            // Welcome notification
             setTimeout(() => {
                 showNotification("🚀 Добро пожаловать в GalaxyFarm!");
             }, 1000);
@@ -1167,11 +1368,14 @@
             }, 5000);
         }
         
-        // Start game
+        // Start game when page loads
         document.addEventListener('DOMContentLoaded', init);
         
-        // Save on exit
+        // Save game when leaving
         window.addEventListener('beforeunload', saveGame);
+        
+        // Auto-save every 30 seconds
+        setInterval(saveGame, 30000);
     </script>
 </body>
 </html>
